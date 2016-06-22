@@ -1,0 +1,57 @@
+from __future__ import division
+import numpy.linalg
+import math
+import turtle
+                # make sure python is in the system path.
+import serial   # On cmd type python -m pip install
+import time
+from struct import unpack
+x=[1,2,3,4,5,6,7, 8]
+y=[1,2,3,4,5,6, 7, 8]
+
+x_m=[]
+y_m=[]
+row_mat= numpy.matrix([x_m, y_m])
+colomn_mat= numpy.transpose(row_mat)
+RSSI=numpy.transpose([190, 191, 192, 194, 195, 200, 0, 195])
+Brodcast_dB = 1
+NumberOFNodes = 8
+
+
+
+A= numpy.ones((NumberOFNodes,2)) #initialization
+RSSI= numpy.ones((NumberOFNodes,1)) #initialization
+logs= numpy.ones((NumberOFNodes,1)) #initialization
+B= numpy.ones((NumberOFNodes,1)) #initialization
+
+
+
+for i in range (0, NumberOFNodes):
+    A[i] = numpy.array([-x[i]/(pow(x[i],2) + pow(y[i],2)), -y[i]/(pow(x[i],2) + pow(y[i],2))])
+    logs[i]= (19.1314 * math.log(pow(x[i],2) + (pow(y[i],2)) ) ) - ((Brodcast_dB + 125.45)/0.5227)
+    B[i]= (RSSI[i]-logs[i])/16.6173236
+
+print ("B=", B)
+invA = numpy.linalg.pinv(A)
+
+
+print ("inverse of A= ", invA)
+#print(numpy.shape (invA))
+#print(numpy.shape (B))
+colomn_mat = numpy.matrix(invA) * numpy.matrix(B)
+print (colomn_mat)
+
+
+#A= numpy.array()
+
+#print(A)
+
+#
+#i=0
+#coefficient= (19.1314 * math.log (pow(x[i],2) + (pow(y[i],2))) + (Brodcast_dB + 125.45)/0.5227 - RSSI[i])/ 16.6173236
+#print (coefficient)
+#A = numpy.matrix([-x[i]/(pow(x[i],2) + pow(y[i],2)), -y[i]/(pow(x[i],2) + pow(y[i],2))])
+#invA = numpy.linalg.pinv(A)
+#print (invA)
+#colomn_mat = coefficient * invA
+#print (colomn_mat)
