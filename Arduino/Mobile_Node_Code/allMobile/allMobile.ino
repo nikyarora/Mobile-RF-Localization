@@ -11,9 +11,9 @@
 // Tested on Flymaple with sparkfun RFM22 wireless shield
 // Tested on ChiKit Uno32 with sparkfun RFM22 wireless shield
 
-#define CLIENT_ADDRESS 0x02
+#define CLIENT_ADDRESS 0x03
 // Singleton instance of the radio driver
-#define MAIN_SERVER_ADDRESS 0xA0
+//#define MAIN_SERVER_ADDRESS 0xA0
 #define NODE_2_ADDRESS 0xA1  // 
 #define NODE_3_ADDRESS 0xA2  // 
 #define NODE_4_ADDRESS 0xA3  // 
@@ -26,9 +26,10 @@ RH_RF22 driver;
 
 uint8_t data[NUMBER_OF_NODES+10];
 uint8_t rssiReceiptFlags[NUMBER_OF_NODES-1];
+//uint8_t data[] = {CLIENT_ADDRESS};
 
 // Class to manage message delivery and receipt, using the driver declared above
-RHReliableDatagram manager(driver, MAIN_SERVER_ADDRESS);
+RHReliableDatagram manager(driver, CLIENT_ADDRESS);
 
 void setup() 
 {
@@ -51,7 +52,6 @@ void setup()
 }
 
 // Data to broadcast to all anchor nodes. This currently represents the mobile node ID.
-//uint8_t data[] = {CLIENT_ADDRESS};
 uint8_t buf[RH_RF22_MAX_MESSAGE_LEN];
 
 void loop()
@@ -88,6 +88,8 @@ void receive()
         data[0] = buf[0];
         data[1] = driver.lastRssi();//(int8_t)(-120 + ((driver.spiRead(RH_RF22_REG_26_RSSI) / 2)));
         Serial.println(data[1],DEC);
+        Serial.print("Node From:");
+        Serial.println(from);
         rssiReceiptFlags[0] = 1;
         
       }
