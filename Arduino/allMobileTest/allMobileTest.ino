@@ -71,49 +71,48 @@ void loop()
       {
         Serial.println();
         Serial.println("Received Mobile Beam(s)");  
-        rssiReceiptFlags[0] = 1;
 
         switch (from) {
         case NODE_2_ADDRESS:
         Serial.println("Received RSSI From M2");  
         data[0] = buf[1];
-        rssiReceiptFlags [1] = 1;
+        rssiReceiptFlags [0] = 1;
         break;
         
         case NODE_3_ADDRESS:
         Serial.println("Received RSSI From M3");  
         data[1] = buf[1];
-        rssiReceiptFlags [2] = 1;
+        rssiReceiptFlags [1] = 1;
         break;
         
         case NODE_4_ADDRESS:
         Serial.println("Received RSSI From M4");  
         data[2] = buf[1];
-        rssiReceiptFlags [3] = 1;
+        rssiReceiptFlags [2] = 1;
         break;
         
         case NODE_5_ADDRESS:
         Serial.println("Received RSSI From M5");  
         data[3] = buf[1];
-        rssiReceiptFlags [4] = 1;
+        rssiReceiptFlags [3] = 1;
         break;
 
         case NODE_6_ADDRESS:
         Serial.println("Received RSSI From M6");  
         data[4] = buf[1];
-        rssiReceiptFlags [5] = 1;
+        rssiReceiptFlags [4] = 1;
         break;
 
         case NODE_7_ADDRESS:
         Serial.println("Received RSSI From M7");  
         data[5] = buf[1];
-        rssiReceiptFlags [6] = 1;
+        rssiReceiptFlags [5] = 1;
         break;
 
         case NODE_8_ADDRESS:
         //Serial.println("Received RSSI From M8");  
         data[6] = buf[1];
-        rssiReceiptFlags [7] = 1;
+        rssiReceiptFlags [6] = 1;
         break; 
         
       }
