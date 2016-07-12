@@ -11,7 +11,7 @@
 // Tested on Flymaple with sparkfun RFM22 wireless shield
 // Tested on ChiKit Uno32 with sparkfun RFM22 wireless shield
 
-#define CLIENT_ADDRESS 0x03
+#define CLIENT_ADDRESS 0x01
 // Singleton instance of the radio driver
 //#define MAIN_SERVER_ADDRESS 0xA0
 #define NODE_2_ADDRESS 0xA1  // 
@@ -56,13 +56,9 @@ uint8_t buf[RH_RF22_MAX_MESSAGE_LEN];
 
 void loop()
 {
-  broadcast();
-  
-  Serial.println("outside receive");
   //RECEIVE
   if (manager.available())
   {
-    Serial.println("In the Receive");
     // Wait for a message addressed to us from the client
     uint8_t len = sizeof(buf);
     uint8_t from;
@@ -80,11 +76,8 @@ void loop()
         Serial.print("Node From:");
         Serial.println(from);
         rssiReceiptFlags[0] = 1;
-        
-      }
-      if
-      {
-        switch (from) {
+
+         switch (from) {
         case NODE_2_ADDRESS:
         Serial.println("Received RSSI From M1");  
         data[2] = buf[1];
@@ -125,25 +118,28 @@ void loop()
         //Serial.println("Received RSSI From M7");  
         data[8] = buf[1];
         rssiReceiptFlags [7] = 1;
-        break;   
+        break; 
         
-        }
       }
 
       uint8_t allDataReceived=1;
-      for (int i=0; i<NUMBER_OF_NODES-1; i++){
+      for (int i=0; i<NUMBER_OF_NODES-1; i++)
+      {
         allDataReceived=allDataReceived && rssiReceiptFlags[i];
-        }
-      if(allDataReceived){  
-      // Send a reply back to the originator client
-        for (int i=0; i<NUMBER_OF_NODES-1; i++){
-        rssiReceiptFlags[i] = 0;
-        Serial.write(data,NUMBER_OF_NODES);
-        }
+      }
+      if(allDataReceived)
+      {  
+        // Send a reply back to the originator client
+          for (int i=0; i<NUMBER_OF_NODES-1; i++)
+          {
+          rssiReceiptFlags[i] = 0;
+          Serial.write(data,NUMBER_OF_NODES);
+          broadcast();
+          }
       }
     }
+   }
   }
-  broadcast();
   
   delay(1000);
 }
