@@ -69,6 +69,7 @@ void loop()
       
       if (to == RH_BROADCAST_ADDRESS)
       {
+        Serial.println();
         Serial.println("Received Mobile Beam");  
         data[0] = buf[0];
         data[1] = driver.lastRssi();//(int8_t)(-120 + ((driver.spiRead(RH_RF22_REG_26_RSSI) / 2)));
@@ -77,7 +78,7 @@ void loop()
         Serial.println(from);
         rssiReceiptFlags[0] = 1;
 
-         switch (from) {
+        switch (from) {
         case NODE_2_ADDRESS:
         Serial.println("Received RSSI From M1");  
         data[2] = buf[1];
@@ -127,21 +128,14 @@ void loop()
       {
         allDataReceived=allDataReceived && rssiReceiptFlags[i];
       }
-      Serial.print("All Data received: ");
-      Serial.println(allDataReceived);
+ 
       if(allDataReceived)
-      {  
-        // Send a reply back to the originator client
-          for (int i=0; i<NUMBER_OF_NODES-1; i++)
-          {
-          rssiReceiptFlags[i] = 0;
-          Serial.write(data,NUMBER_OF_NODES);
-          broadcast();
-          }
+      {    
+         broadcast();
       }
     }
-   }
   }
+ }
   
   delay(1000);
 }
@@ -149,6 +143,7 @@ void loop()
 void broadcast()
 {  
   //BROADCAST
+  Serial.println();
   Serial.println("Broadcasting ID to reachable mobile nodes.");
 
     //Broadcast the message to all other reachable nodes.
