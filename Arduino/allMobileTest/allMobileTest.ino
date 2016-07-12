@@ -14,13 +14,13 @@
 #define CLIENT_ADDRESS 0x01
 // Singleton instance of the radio driver
 //#define MAIN_SERVER_ADDRESS 0xA0
-#define NODE_2_ADDRESS 0xA1  // 
-#define NODE_3_ADDRESS 0xA2  // 
-#define NODE_4_ADDRESS 0xA3  // 
-#define NODE_5_ADDRESS 0xA4  // 
-#define NODE_6_ADDRESS 0xA5  // 
-#define NODE_7_ADDRESS 0xA6  // 
-#define NODE_8_ADDRESS 0xA7  // 
+#define NODE_2_ADDRESS 0x02  // 
+#define NODE_3_ADDRESS 0x03  // 
+#define NODE_4_ADDRESS 0x04  // 
+#define NODE_5_ADDRESS 0x05  // 
+#define NODE_6_ADDRESS 0x06  // 
+#define NODE_7_ADDRESS 0x07  // 
+#define NODE_8_ADDRESS 0x08  // 
 #define NUMBER_OF_NODES 3
 RH_RF22 driver;
 
@@ -127,6 +127,8 @@ void loop()
       {
         allDataReceived=allDataReceived && rssiReceiptFlags[i];
       }
+      Serial.print("All Data received: ");
+      Serial.println(allDataReceived);
       if(allDataReceived)
       {  
         // Send a reply back to the originator client
