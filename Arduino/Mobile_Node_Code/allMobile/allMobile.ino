@@ -68,9 +68,8 @@ void loop()
   }
   else
     Serial.println("sendtoWait failed");
-    
+
   receive();
-  
   delay(1000);
 }
 
@@ -150,6 +149,7 @@ void receive()
       for (int i=0; i<NUMBER_OF_NODES-1; i++){
         allDataReceived=allDataReceived && rssiReceiptFlags[i];
         }
+
       if(allDataReceived){  
       // Send a reply back to the originator client
         for (int i=0; i<NUMBER_OF_NODES-1; i++){
