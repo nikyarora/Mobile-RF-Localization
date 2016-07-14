@@ -54,28 +54,10 @@ void setup()
   if(CLIENT_ADDRESS == 0x01)
   {
     uint8_t receivedFromAll = 0;
-
     while(receivedFromAll == 0)
     {
-      int numAck = 0;
-      for(int i = 2; i <= NUMBER_OF_NODES; i++)
-      {
-         uint8_t len = sizeof(buf);
-         uint8_t from = i;
-         uint8_t to;
-         if(manager.recvfromAck(buf, &len, &from, &to));
-         {
-            Serial.println(from);
-            numAck ++;
-         }
-      }
-
-      if(numAck == NUMBER_OF_NODES - 1)
-      {
-        receivedFromAll = 1;
-      }
+      receivedFromAll = receiveSetup();
     }
- 
   }
   else if(CLIENT_ADDRESS == 0x02)
   {
@@ -179,6 +161,79 @@ void loop()
  }
   
   delay(1000);
+}
+
+int receiveSetup()
+{
+  if (manager.available())
+  {
+    // Wait for a message addressed to us from the client
+    uint8_t len = sizeof(buf);
+    uint8_t from;
+    uint8_t to;
+    int8_t rssi;
+    if (manager.recvfromAck(buf, &len, &from, &to))
+    {
+      if (to == RH_BROADCAST_ADDRESS)
+      {
+        Serial.println();
+        Serial.println("Received Mobile Beam(s)");  
+
+        switch (from) {
+        case NODE_2_ADDRESS:
+        Serial.println("Received From M2");  
+        rssiReceiptFlags [0] = 1;
+        break;
+        
+        case NODE_3_ADDRESS:
+        Serial.println("Received From M3");  
+        rssiReceiptFlags [1] = 1;
+        break;
+        
+        case NODE_4_ADDRESS:
+        Serial.println("Received From M4");
+        rssiReceiptFlags [2] = 1;
+        break;
+        
+        case NODE_5_ADDRESS:
+        Serial.println("Received From M5");  
+        rssiReceiptFlags [3] = 1;
+        break;
+
+        case NODE_6_ADDRESS:
+        Serial.println("Received From M6");  
+        rssiReceiptFlags [4] = 1;
+        break;
+
+        case NODE_7_ADDRESS:
+        Serial.println("Received From M7");  
+        rssiReceiptFlags [5] = 1;
+        break;
+
+        case NODE_8_ADDRESS:
+        Serial.println("Received From M8");  
+        rssiReceiptFlags [6] = 1;
+        break; 
+      }
+      
+      uint8_t receivedFromAll = 1;
+      for (int i=0; i<NUMBER_OF_NODES-1; i++)
+      {
+        receivedFromAll=receivedFromAll && rssiReceiptFlags[i];
+      }
+
+      //Checks to see if all the data is received. If so, sends out a broadcast signal
+      if(receivedFromAll)
+      {  
+        return 1;  
+      }
+      else
+      {
+        return 0;
+      }
+    }
+  }
+}
 }
 
 void broadcast()
