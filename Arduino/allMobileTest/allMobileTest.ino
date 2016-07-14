@@ -26,6 +26,7 @@ RH_RF22 driver;
 
 uint8_t data[NUMBER_OF_NODES+10];
 uint8_t rssiReceiptFlags[NUMBER_OF_NODES-1];
+uint8_t buf[RH_RF22_MAX_MESSAGE_LEN];
 //uint8_t data[] = {CLIENT_ADDRESS};
 
 // Class to manage message delivery and receipt, using the driver declared above
@@ -44,28 +45,47 @@ void setup()
   }
   
   // Flags indicating the receipt of rssi of each mobile node from each anchor.
-
   for (int i=0; i<NUMBER_OF_NODES-1; i++)
   {
     rssiReceiptFlags[i]=0;
   }
 
+
   if(CLIENT_ADDRESS == 0x01)
   {
-    
+    uint8_t receivedFromAll = 0;
+
+    while(receivedFromAll == 0)
+    {
+      int numAck = 0;
+      for(int i = 2; i <= NUMBER_OF_NODES; i++)
+      {
+         uint8_t len = sizeof(buf);
+         uint8_t from = i;
+         uint8_t to;
+         if(manager.recvfromAck(buf, &len, &from, &to));
+         {
+            Serial.println(from);
+            numAck ++;
+         }
+      }
+
+      if(numAck == NUMBER_OF_NODES - 1)
+      {
+        receivedFromAll = 1;
+      }
+    }
+ 
   }
   else if(CLIENT_ADDRESS == 0x02)
   {
-    
+    broadcast();
   }
   else if(CLIENT_ADDRESS == 0x03)
   {
-    
+    broadcast();
   }
 }
-
-// Data to broadcast to all anchor nodes. This currently represents the mobile node ID.
-uint8_t buf[RH_RF22_MAX_MESSAGE_LEN];
 
 void loop()
 {
@@ -79,7 +99,6 @@ void loop()
     int8_t rssi;
     if (manager.recvfromAck(buf, &len, &from, &to))
     {
-      
       if (to == RH_BROADCAST_ADDRESS)
       {
         Serial.println();
@@ -129,20 +148,21 @@ void loop()
         break;
 
         case NODE_8_ADDRESS:
-        //Serial.println("Received RSSI From M8");  
+        Serial.println("Received RSSI From M8");  
         data[6] = buf[1];
         Serial.println(data[6]);
         rssiReceiptFlags [6] = 1;
         break; 
         
       }
-
+      
       uint8_t allDataReceived=1;
       for (int i=0; i<NUMBER_OF_NODES-1; i++)
       {
         allDataReceived=allDataReceived && rssiReceiptFlags[i];
       }
-      
+
+      //Checks to see if all the data is received. If so, sends out a broadcast signal
       if(allDataReceived)
       {    
          broadcast();
