@@ -233,7 +233,7 @@ int receiveSetup()
       }
     }
   }
-}
+ }
 }
 
 void broadcast()
