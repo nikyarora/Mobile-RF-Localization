@@ -79,10 +79,12 @@ void setup()
   }
   else if(CLIENT_ADDRESS == 0x02)
   {
+    //needs to broacast till node 1 receives and then start receiving
     broadcast();
   }
   else if(CLIENT_ADDRESS == 0x03)
   {
+    //needs to broadcast till node 1 and 2 receive and then start receiving
     broadcast();
   }
 }
