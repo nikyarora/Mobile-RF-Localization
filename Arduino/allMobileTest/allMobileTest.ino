@@ -50,7 +50,6 @@ void setup()
     rssiReceiptFlags[i]=0;
   }
 
-
   if(CLIENT_ADDRESS == 0x01)
   {
     uint8_t receivedFromAll = 0;
@@ -231,9 +230,9 @@ int receiveSetup()
       {
         return 0;
       }
+      }
     }
   }
- }
 }
 
 void broadcast()
