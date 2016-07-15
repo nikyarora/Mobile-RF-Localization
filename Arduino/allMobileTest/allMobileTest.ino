@@ -185,38 +185,59 @@ int receiveSetup()
 
         switch (from) {
         case NODE_2_ADDRESS:
-        Serial.println("Received From M2");  
-        rssiReceiptFlags [0] = 1;
+        if (manager.sendtoWait(data, sizeof(data), NODE_2_ADDRESS))
+        {
+          Serial.println("Received From M2");
+          rssiReceiptFlags [0] = 1;
+        }
         break;
         
         case NODE_3_ADDRESS:
-        Serial.println("Received From M3");  
-        rssiReceiptFlags [1] = 1;
+        if (manager.sendtoWait(data, sizeof(data), NODE_3_ADDRESS))
+        {
+           Serial.println("Received From M3");  
+           rssiReceiptFlags [1] = 1;
+        }
         break;
         
         case NODE_4_ADDRESS:
-        Serial.println("Received From M4");
-        rssiReceiptFlags [2] = 1;
+        if (manager.sendtoWait(data, sizeof(data), NODE_4_ADDRESS))
+        {
+          Serial.println("Received From M4");
+          rssiReceiptFlags [2] = 1;
+        }
         break;
         
         case NODE_5_ADDRESS:
-        Serial.println("Received From M5");  
-        rssiReceiptFlags [3] = 1;
+        if (manager.sendtoWait(data, sizeof(data), NODE_5_ADDRESS))
+        {
+          Serial.println("Received From M5");  
+          rssiReceiptFlags [3] = 1;
+        }
         break;
 
         case NODE_6_ADDRESS:
-        Serial.println("Received From M6");  
-        rssiReceiptFlags [4] = 1;
+        if (manager.sendtoWait(data, sizeof(data), NODE_5_ADDRESS))
+        {
+          Serial.println("Received From M6");  
+          rssiReceiptFlags [4] = 1;
+        }
         break;
 
         case NODE_7_ADDRESS:
-        Serial.println("Received From M7");  
-        rssiReceiptFlags [5] = 1;
+        if (manager.sendtoWait(data, sizeof(data), NODE_7_ADDRESS))
+        {
+          Serial.println("Received From M7");  
+          rssiReceiptFlags [5] = 1;
+        }
         break;
 
         case NODE_8_ADDRESS:
-        Serial.println("Received From M8");  
-        rssiReceiptFlags [6] = 1;
+        if (manager.sendtoWait(data, sizeof(data), NODE_8_ADDRESS))
+        {
+          Serial.println("Received From M8");  
+          rssiReceiptFlags [6] = 1;
+        }
         break; 
       }
       
