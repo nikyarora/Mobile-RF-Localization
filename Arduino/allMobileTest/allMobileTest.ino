@@ -56,6 +56,11 @@ void setup()
     while(receivedFromAll == 0)
     {
       receivedFromAll = receiveSetup();
+      
+      if(receivedFromAll == 0)
+      {
+        Serial.println("Did Not Receive");
+      }
     }
   }
   else if(CLIENT_ADDRESS == 0x02)
