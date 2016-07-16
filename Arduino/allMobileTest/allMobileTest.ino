@@ -65,13 +65,39 @@ void setup()
   }
   else if(CLIENT_ADDRESS == 0x02)
   {
-    //needs to broacast till node 1 receives and then start receiving
-    broadcast();
+    uint8_t recvAck = 0;
+    while(recvAck == 0)
+    {
+       broadcast();
+       recvAck = receiveAcknowledge();
+    }
   }
   else if(CLIENT_ADDRESS == 0x03)
   {
-    //needs to broadcast till node 1 and 2 receive and then start receiving
-    broadcast();
+    uint8_t recvAck = 0;
+    while(recvAck == 0)
+    {
+       broadcast();
+       recvAck = receiveAcknowledge();
+    }
+  }
+  else if(CLIENT_ADDRESS == 0x04)
+  {
+    uint8_t recvAck = 0;
+    while(recvAck == 0)
+    {
+       broadcast();
+       recvAck = receiveAcknowledge();
+    }
+  }
+  else if(CLIENT_ADDRESS == 0x05)
+  {
+    uint8_t recvAck = 0;
+    while(recvAck == 0)
+    {
+       broadcast();
+       recvAck = receiveAcknowledge();
+    }
   }
 }
 
@@ -259,6 +285,23 @@ int receiveSetup()
       }
     }
   }
+}
+
+int receiveAcknowledge()
+{
+  // Wait for a message addressed to us from the client
+    uint8_t len = sizeof(buf);
+    uint8_t from;
+    uint8_t to;
+    int8_t rssi;
+    if (manager.recvfromAck(buf, &len, &from, &to))
+    {
+        return 1;
+    }
+    else
+    {
+      return 0;
+    }
 }
 
 void broadcast()
