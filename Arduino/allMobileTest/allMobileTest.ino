@@ -55,12 +55,7 @@ void setup()
     uint8_t receivedFromAll = 0;
     while(receivedFromAll == 0)
     {
-      receivedFromAll = receiveSetup();
-      
-      if(receivedFromAll == 0)
-      {
-        Serial.println("Did Not Receive");
-      }
+      receivedFromAll = receiveSetup();   
     }
   }
   else if(CLIENT_ADDRESS == 0x02)
