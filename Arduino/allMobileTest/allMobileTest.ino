@@ -11,17 +11,17 @@
 // Tested on Flymaple with sparkfun RFM22 wireless shield
 // Tested on ChiKit Uno32 with sparkfun RFM22 wireless shield
 
-#define CLIENT_ADDRESS 0x01
+#define CLIENT_ADDRESS 0x02
 // Singleton instance of the radio driver
 //#define MAIN_SERVER_ADDRESS 0xA0
-#define NODE_2_ADDRESS 0x02  // 
+#define NODE_2_ADDRESS 0x01  // 
 #define NODE_3_ADDRESS 0x03  // 
 #define NODE_4_ADDRESS 0x04  // 
 #define NODE_5_ADDRESS 0x05  // 
 #define NODE_6_ADDRESS 0x06  // 
 #define NODE_7_ADDRESS 0x07  // 
 #define NODE_8_ADDRESS 0x08  // 
-#define NUMBER_OF_NODES 3
+#define NUMBER_OF_NODES 2
 RH_RF22 driver;
 
 uint8_t data[NUMBER_OF_NODES+10];
@@ -65,6 +65,7 @@ void setup()
     {
        broadcast();
        recvAck = receiveAcknowledge();
+       Serial.println(recvAck);
     }
   }
   else if(CLIENT_ADDRESS == 0x03)
@@ -203,7 +204,8 @@ int receiveSetup()
       if (to == RH_BROADCAST_ADDRESS)
       {
         Serial.println();
-        Serial.println("Received Mobile Beam(s)");  
+        Serial.println("Received Mobile Beam(s)"); 
+        Serial.println(from); 
 
         switch (from) {
         case NODE_2_ADDRESS:
@@ -211,6 +213,10 @@ int receiveSetup()
         {
           Serial.println("Received From M2");
           rssiReceiptFlags [0] = 1;
+        }
+        else
+        {
+          Serial.println("SendtoWait Failed");
         }
         break;
         
@@ -285,19 +291,25 @@ int receiveSetup()
 
 int receiveAcknowledge()
 {
-  // Wait for a message addressed to us from the client
+  if(manager.available())
+  {
+    Serial.println("in receiveAcknowledge");
+    // Wait for a message addressed to us from the client
     uint8_t len = sizeof(buf);
     uint8_t from;
     uint8_t to;
     int8_t rssi;
     if (manager.recvfromAck(buf, &len, &from, &to))
     {
+      Serial.println("message received");
         return 1;
     }
     else
     {
+      Serial.println("in here");
       return 0;
     }
+  }
 }
 
 void broadcast()
@@ -316,4 +328,5 @@ void broadcast()
   else
     Serial.println("sendtoWait failed");
 }
+
 
