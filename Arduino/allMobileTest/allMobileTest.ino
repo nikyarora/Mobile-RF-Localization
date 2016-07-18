@@ -74,6 +74,7 @@ void setup()
     {
        broadcast();
        recvAck = receiveAcknowledge();
+       //broadcast then receive
     }
   }
   else if(CLIENT_ADDRESS == 0x04)
