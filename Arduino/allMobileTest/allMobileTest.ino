@@ -91,11 +91,14 @@ void setup()
       broadcastSuccessful = receiveAcknowledge();
     }
   }
+
+  Serial.println("Done with setup");
 }
 
 void loop()
 {
   //RECEIVE
+  Serial.println("in the loop");
   if (manager.available())
   {
     // Wait for a message addressed to us from the client
@@ -197,7 +200,6 @@ void loop()
  */
 int receiveSetup()
 {
-  Serial.println(manager.available());
   if (manager.available())
   {
     // Wait for a message addressed to us from the client
@@ -368,7 +370,7 @@ int receiveAcknowledge()
   uint8_t waitToReceive = 0;
 
   //Broadcast the message to all other reachable nodes.
-  if (manager.sendtoWait(data, sizeof(data), CLIENT_ADDRESS))
+  if (manager.sendtoWait(data, sizeof(data), NODE_1_ADDRESS))
   {
     delay(1000);
     Serial.println("Broadcast Successful");
