@@ -35,6 +35,7 @@ void loop()
   //BROADCAST
   Serial.println();
   Serial.println("Broadcasting ID to NODE 2.");
+  uint8_t waitToReceive = 0;
 
     //Broadcast the message to all other reachable nodes.
   if (manager.sendtoWait(data, sizeof(data), NODE_2_ADDRESS))
@@ -42,31 +43,32 @@ void loop()
     Serial.println("Broadcast Successful");
     Serial.print("My Address: ");
     Serial.println(CLIENT_ADDRESS);
+    while(waitToReceive == 0)
+    {
+     if (manager.available())
+     {
+        Serial.println("manager is available");
+        // Wait for a message addressed to us from the client
+        uint8_t len = sizeof(buf);
+        uint8_t from;
+        uint8_t to;
+        int8_t rssi;
+        if (manager.recvfromAck(buf, &len, &from, &to))
+        {
+          Serial.println(from);
+          Serial.println("RECEIVED AN ACKNOWLEDGEMENT");
+          waitToReceive = 1;
+        }
+        else
+        {
+          Serial.println("DID NOT RECEIVE AN ACKNOWLEGEMENT");
+          waitToReceive = 0;
+        }
+     }
+    }
   }
   else
     Serial.println("sendtoWait failed");
-
-   delay(2000);
-
-   //RECEIVE AN ACKNOWLEDGEMENT
-   if (manager.available())
-   {
-      Serial.println("manager is available");
-      // Wait for a message addressed to us from the client
-      uint8_t len = sizeof(buf);
-      uint8_t from;
-      uint8_t to;
-      int8_t rssi;
-      if (manager.recvfromAck(buf, &len, &from, &to))
-      {
-        Serial.println(from);
-        Serial.println("RECEIVED AN ACKNOWLEDGEMENT");
-      }
-      else
-      {
-        Serial.println("DID NOT RECEIVE AN ACKNOWLEGEMENT");
-      }
-   }
 
   delay(1000);
 }
