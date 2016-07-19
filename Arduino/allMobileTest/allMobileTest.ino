@@ -64,6 +64,7 @@ void setup()
     while(recvAck == 0)
     {
        broadcast();
+       delay(2000);
        recvAck = receiveAcknowledge();
        Serial.println(recvAck);
     }
