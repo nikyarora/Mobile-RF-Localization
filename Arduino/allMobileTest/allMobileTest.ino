@@ -22,8 +22,8 @@
 #define NUMBER_OF_NODES 2
 RH_RF22 driver;
 
-#define CLIENT_ADDRESS NODE_1_ADDRESS
-//#define CLIENT_ADDRESS NODE_2_ADDRESS
+//#define CLIENT_ADDRESS NODE_1_ADDRESS
+#define CLIENT_ADDRESS NODE_2_ADDRESS
 
 uint8_t data[NUMBER_OF_NODES+10];
 uint8_t rssiReceiptFlags[NUMBER_OF_NODES-1];
@@ -58,6 +58,8 @@ void setup()
     {
        receiveSuccessful = receiveSetup();
     }
+
+    broadcast();
   }
   else if(CLIENT_ADDRESS == 0x02)
   {
@@ -106,6 +108,7 @@ void loop()
     uint8_t from;
     uint8_t to;
     int8_t rssi;
+    uint8_t sendtoWait = 0;
     if (manager.recvfromAck(buf, &len, &from, &to))
     {
       if (to == RH_BROADCAST_ADDRESS)
@@ -119,12 +122,34 @@ void loop()
         data[0] = buf[1];
         Serial.println(data[0]);
         rssiReceiptFlags [0] = 1;
+        while(sendtoWait == 0)
+        {
+            if(manager.sendtoWait(data, sizeof(data),from))
+            {
+              sendtoWait = 1;
+            }
+            else
+            {
+              sendtoWait = 0;
+            }
+        }
         
         case NODE_2_ADDRESS:
         Serial.println("Received RSSI From M2");  
         data[1] = buf[1];
         Serial.println(data[1]);
         rssiReceiptFlags [1] = 1;
+        while(sendtoWait == 0)
+        {
+            if(manager.sendtoWait(data, sizeof(data), from))
+            {
+              sendtoWait = 1;
+            }
+            else
+            {
+              sendtoWait = 0;
+            }
+        }
         break;
         
         case NODE_3_ADDRESS:
@@ -132,9 +157,20 @@ void loop()
         data[2] = buf[1];
         Serial.println(data[2]);
         rssiReceiptFlags [2] = 1;
+        while(sendtoWait == 0)
+        {
+            if(manager.sendtoWait(data, sizeof(data), from))
+            {
+              sendtoWait = 1;
+            }
+            else
+            {
+              sendtoWait = 0;
+            }
+        }
         break;
         
-        case NODE_4_ADDRESS:
+        /**case NODE_4_ADDRESS:
         Serial.println("Received RSSI From M4");  
         data[3] = buf[1];
         Serial.println(data[3]);
@@ -167,7 +203,7 @@ void loop()
         data[7] = buf[1];
         Serial.println(data[7]);
         rssiReceiptFlags [7] = 1;
-        break; 
+        break; **/
         
       }
       uint8_t allDataReceived=1;
@@ -248,7 +284,7 @@ int receiveSetup()
           }
           break;
           
-          case NODE_4_ADDRESS:
+          /**case NODE_4_ADDRESS:
           Serial.println("Received From M4");
           rssiReceiptFlags [2] = 1;
           while(sendtoWait == 0)
@@ -336,7 +372,7 @@ int receiveSetup()
               sendtoWait = 0;
             }
           } 
-          break; 
+          break; **/
         }
       }
       
@@ -374,7 +410,7 @@ int receiveAcknowledge()
   {
     delay(1000);
     Serial.println("Broadcast Successful");
-    while(waitToReceive == 0)
+    while(waitToReceive == 0) 
     {
      if (manager.available())
      {
@@ -410,7 +446,9 @@ void broadcast()
 {  
   //BROADCAST
   Serial.println();
-  Serial.println("Broadcasting ID to reachable mobile nodes.");
+  Serial.println("Broadcasting ID to all receiving nodes.");
+  uint8_t waitToReceive = 0;
+  int numAcks = 0;
 
     //Broadcast the message to all other reachable nodes.
   if (manager.sendtoWait(data, sizeof(data), RH_BROADCAST_ADDRESS))
@@ -418,6 +456,29 @@ void broadcast()
     Serial.println("Broadcast Successful");
     Serial.print("My Address: ");
     Serial.println(CLIENT_ADDRESS);
+    
+    while(waitToReceive == 0 && numAcks != NUMBER_OF_NODES - 1) 
+    {
+     if (manager.available())
+     {
+        Serial.println("manager is available");
+        // Wait for a message addressed to us from the client
+        uint8_t len = sizeof(buf);
+        uint8_t from;
+        uint8_t to;
+        int8_t rssi;
+        if (manager.recvfromAck(buf, &len, &from, &to))
+        {
+          waitToReceive = 1;
+          numAcks++;
+        }
+        else
+        {
+          waitToReceive = 0;
+        }
+     }
+     
+    }
   }
   else
     Serial.println("sendtoWait failed");
