@@ -22,7 +22,7 @@
 #define NUMBER_OF_NODES 2
 RH_RF22 driver;
 
-#define CLIENT_ADDRESS NODE_2_ADDRESS
+#define CLIENT_ADDRESS NODE_1_ADDRESS
 
 uint8_t data[NUMBER_OF_NODES+10];
 uint8_t rssiReceiptFlags[NUMBER_OF_NODES-1];
@@ -52,49 +52,23 @@ void setup()
 
   if(CLIENT_ADDRESS == 0x01)
   {
-    uint8_t receivedFromAll = 0;
-    while(receivedFromAll == 0)
-    {
-      receivedFromAll = receiveSetup();   
-    }
+    receiveSetup();
   }
   else if(CLIENT_ADDRESS == 0x02)
   {
-    uint8_t recvAck = 0;
-    while(recvAck == 0)
-    {
-       broadcast();
-       delay(2000);
-       recvAck = receiveAcknowledge();
-       Serial.println(recvAck);
-    }
+    receiveAcknowledge();
   }
   else if(CLIENT_ADDRESS == 0x03)
   {
-    uint8_t recvAck = 0;
-    while(recvAck == 0)
-    {
-       broadcast();
-       recvAck = receiveAcknowledge();
-    }
+    receiveAcknowledge();
   }
   else if(CLIENT_ADDRESS == 0x04)
   {
-    uint8_t recvAck = 0;
-    while(recvAck == 0)
-    {
-       broadcast();
-       recvAck = receiveAcknowledge();
-    }
+    receiveAcknowledge();
   }
   else if(CLIENT_ADDRESS == 0x05)
   {
-    uint8_t recvAck = 0;
-    while(recvAck == 0)
-    {
-       broadcast();
-       recvAck = receiveAcknowledge();
-    }
+    receiveAcknowledge();
   }
 }
 
@@ -200,7 +174,7 @@ void loop()
  * The first node receives from each active broadcasting node
  * and sends an acknowledgement.
  */
-int receiveSetup()
+void receiveSetup()
 {
   if (manager.available())
   {
@@ -343,22 +317,6 @@ int receiveSetup()
         } 
         break; 
       }
-      
-      uint8_t receivedFromAll = 1;
-      for (int i=0; i<NUMBER_OF_NODES-1; i++)
-      {
-        receivedFromAll=receivedFromAll && rssiReceiptFlags[i];
-      }
-
-      //Checks to see if all the data is received. If so, sends out a broadcast signal
-      if(receivedFromAll)
-      {  
-        return 1;  
-      }
-      else
-      {
-        return 0;
-      }
       }
     }
 }
@@ -369,11 +327,11 @@ int receiveSetup()
  * This is the method called by all the nodes in the setup
  * to broadcast and then receive an acknowledgement.
  */
-int receiveAcknowledge()
+void receiveAcknowledge()
 {
   //BROADCAST
   Serial.println();
-  Serial.println("Broadcasting ID to NODE 2.");
+  Serial.println("Broadcasting ID to NODE 1.");
   uint8_t waitToReceive = 0;
 
     //Broadcast the message to all other reachable nodes.
