@@ -40,6 +40,7 @@ void loop()
     //Broadcast the message to all other reachable nodes.
   if (manager.sendtoWait(data, sizeof(data), NODE_2_ADDRESS))
   {
+    delay(1000);
     Serial.println("Broadcast Successful");
     Serial.print("My Address: ");
     Serial.println(CLIENT_ADDRESS);

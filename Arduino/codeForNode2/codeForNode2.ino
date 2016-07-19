@@ -46,6 +46,7 @@ void loop()
     int8_t rssi;
     if (manager.recvfromAck(buf, &len, &from, &to))
     {
+      delay(1000);
       Serial.println("Received RSSI From M2");  
       while(sendtoWait == 0)
       {
