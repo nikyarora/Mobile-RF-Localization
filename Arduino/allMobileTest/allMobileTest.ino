@@ -23,6 +23,7 @@
 RH_RF22 driver;
 
 #define CLIENT_ADDRESS NODE_1_ADDRESS
+//#define CLIENT_ADDRESS NODE_2_ADDRESS
 
 uint8_t data[NUMBER_OF_NODES+10];
 uint8_t rssiReceiptFlags[NUMBER_OF_NODES-1];
@@ -52,23 +53,43 @@ void setup()
 
   if(CLIENT_ADDRESS == 0x01)
   {
-    receiveSetup();
+    uint8_t receiveSuccessful = 0;
+    while(receiveSuccessful == 0)
+    {
+       receiveSuccessful = receiveSetup();
+    }
   }
   else if(CLIENT_ADDRESS == 0x02)
   {
-    receiveAcknowledge();
+    uint8_t broadcastSuccessful = 0;
+    while(broadcastSuccessful == 0)
+    {
+      broadcastSuccessful = receiveAcknowledge();
+    }
   }
   else if(CLIENT_ADDRESS == 0x03)
   {
-    receiveAcknowledge();
+    uint8_t broadcastSuccessful = 0;
+    while(broadcastSuccessful == 0)
+    {
+      broadcastSuccessful = receiveAcknowledge();
+    }
   }
   else if(CLIENT_ADDRESS == 0x04)
   {
-    receiveAcknowledge();
+    uint8_t broadcastSuccessful = 0;
+    while(broadcastSuccessful == 0)
+    {
+      broadcastSuccessful = receiveAcknowledge();
+    }
   }
   else if(CLIENT_ADDRESS == 0x05)
   {
-    receiveAcknowledge();
+    uint8_t broadcastSuccessful = 0;
+    while(broadcastSuccessful == 0)
+    {
+      broadcastSuccessful = receiveAcknowledge();
+    }
   }
 }
 
@@ -174,8 +195,9 @@ void loop()
  * The first node receives from each active broadcasting node
  * and sends an acknowledgement.
  */
-void receiveSetup()
+int receiveSetup()
 {
+  Serial.println(manager.available());
   if (manager.available())
   {
     // Wait for a message addressed to us from the client
@@ -186,155 +208,166 @@ void receiveSetup()
     int8_t rssi;
     if (manager.recvfromAck(buf, &len, &from, &to))
     {
-        switch (from) {
-        case NODE_2_ADDRESS:
-        Serial.println("Received From M2");
-        rssiReceiptFlags [0] = 1;
-        while(sendtoWait == 0)
+        switch (from) 
         {
-          if(manager.sendtoWait(data, sizeof(data), NODE_2_ADDRESS))
+          case NODE_2_ADDRESS:
+          Serial.println("Received From M2");
+          rssiReceiptFlags [0] = 1;
+          while(sendtoWait == 0)
           {
-            Serial.println("2 success");
-            sendtoWait = 1;
+            if(manager.sendtoWait(data, sizeof(data), NODE_2_ADDRESS))
+            {
+              Serial.println("2 success");
+              sendtoWait = 1;
+            }
+            else
+            {
+              Serial.println("2 keep going");
+              sendtoWait = 0;
+            }
           }
-          else
+          break;
+          
+          case NODE_3_ADDRESS:
+          Serial.println("Received From M3");  
+          rssiReceiptFlags [1] = 1;
+          while(sendtoWait == 0)
           {
-            Serial.println("2 keep going");
-            sendtoWait = 0;
+            if(manager.sendtoWait(data, sizeof(data), NODE_3_ADDRESS))
+            {
+              Serial.println("3 success");
+              sendtoWait = 1;
+            }
+            else
+            {
+              Serial.println("3 keep going");
+              sendtoWait = 0;
+            }
           }
+          break;
+          
+          case NODE_4_ADDRESS:
+          Serial.println("Received From M4");
+          rssiReceiptFlags [2] = 1;
+          while(sendtoWait == 0)
+          {
+            if(manager.sendtoWait(data, sizeof(data), NODE_4_ADDRESS))
+            {
+              Serial.println("4 success");
+              sendtoWait = 1;
+            }
+            else
+            {
+              Serial.println("4 keep going");
+              sendtoWait = 0;
+            }
+          }
+          break;
+          
+          case NODE_5_ADDRESS:
+          Serial.println("Received From M5");  
+          rssiReceiptFlags [3] = 1;
+          while(sendtoWait == 0)
+          {
+            if(manager.sendtoWait(data, sizeof(data), NODE_5_ADDRESS))
+            {
+              Serial.println("5 success");
+              sendtoWait = 1;
+            }
+            else
+            {
+              Serial.println("5 keep going");
+              sendtoWait = 0;
+            }
+          }
+          break;
+  
+          case NODE_6_ADDRESS:
+          Serial.println("Received From M6");  
+          rssiReceiptFlags [4] = 1;
+          while(sendtoWait == 0)
+          {
+            if(manager.sendtoWait(data, sizeof(data), NODE_6_ADDRESS))
+            {
+              Serial.println("6 success");
+              sendtoWait = 1;
+            }
+            else
+            {
+              Serial.println("6 keep going");
+              sendtoWait = 0;
+            }
+          }
+          break;
+  
+          case NODE_7_ADDRESS:
+          Serial.println("Received From M7");  
+          rssiReceiptFlags [5] = 1;
+          while(sendtoWait == 0)
+          {
+            if(manager.sendtoWait(data, sizeof(data), NODE_7_ADDRESS))
+            {
+              Serial.println("7 success");
+              sendtoWait = 1;
+            }
+            else
+            {
+              Serial.println("7 keep going");
+              sendtoWait = 0;
+            }
+          }
+          break;
+  
+          case NODE_8_ADDRESS:
+          Serial.println("Received From M8");  
+          rssiReceiptFlags [6] = 1;
+          while(sendtoWait == 0)
+          {
+            if(manager.sendtoWait(data, sizeof(data), NODE_8_ADDRESS))
+            {
+              Serial.println("8 success");
+              sendtoWait = 1;
+            }
+            else
+            {
+              Serial.println("8 keep going");
+              sendtoWait = 0;
+            }
+          } 
+          break; 
         }
-        break;
-        
-        case NODE_3_ADDRESS:
-        Serial.println("Received From M3");  
-        rssiReceiptFlags [1] = 1;
-        while(sendtoWait == 0)
-        {
-          if(manager.sendtoWait(data, sizeof(data), NODE_3_ADDRESS))
-          {
-            Serial.println("3 success");
-            sendtoWait = 1;
-          }
-          else
-          {
-            Serial.println("3 keep going");
-            sendtoWait = 0;
-          }
-        }
-        
-        break;
-        
-        case NODE_4_ADDRESS:
-        Serial.println("Received From M4");
-        rssiReceiptFlags [2] = 1;
-        while(sendtoWait == 0)
-        {
-          if(manager.sendtoWait(data, sizeof(data), NODE_4_ADDRESS))
-          {
-            Serial.println("4 success");
-            sendtoWait = 1;
-          }
-          else
-          {
-            Serial.println("4 keep going");
-            sendtoWait = 0;
-          }
-        }
-        
-        break;
-        
-        case NODE_5_ADDRESS:
-        Serial.println("Received From M5");  
-        rssiReceiptFlags [3] = 1;
-        while(sendtoWait == 0)
-        {
-          if(manager.sendtoWait(data, sizeof(data), NODE_5_ADDRESS))
-          {
-            Serial.println("5 success");
-            sendtoWait = 1;
-          }
-          else
-          {
-            Serial.println("5 keep going");
-            sendtoWait = 0;
-          }
-        }
-        break;
-
-        case NODE_6_ADDRESS:
-        Serial.println("Received From M6");  
-        rssiReceiptFlags [4] = 1;
-        while(sendtoWait == 0)
-        {
-          if(manager.sendtoWait(data, sizeof(data), NODE_6_ADDRESS))
-          {
-            Serial.println("6 success");
-            sendtoWait = 1;
-          }
-          else
-          {
-            Serial.println("6 keep going");
-            sendtoWait = 0;
-          }
-        }
-        
-        break;
-
-        case NODE_7_ADDRESS:
-        Serial.println("Received From M7");  
-        rssiReceiptFlags [5] = 1;
-        while(sendtoWait == 0)
-        {
-          if(manager.sendtoWait(data, sizeof(data), NODE_7_ADDRESS))
-          {
-            Serial.println("7 success");
-            sendtoWait = 1;
-          }
-          else
-          {
-            Serial.println("7 keep going");
-            sendtoWait = 0;
-          }
-        }
-        
-        break;
-
-        case NODE_8_ADDRESS:
-        Serial.println("Received From M8");  
-        rssiReceiptFlags [6] = 1;
-        while(sendtoWait == 0)
-        {
-          if(manager.sendtoWait(data, sizeof(data), NODE_8_ADDRESS))
-          {
-            Serial.println("8 success");
-            sendtoWait = 1;
-          }
-          else
-          {
-            Serial.println("8 keep going");
-            sendtoWait = 0;
-          }
-        } 
-        break; 
       }
+      
+      uint8_t allDataReceived=1;
+      for (int i=0; i<NUMBER_OF_NODES-1; i++)
+      {
+        allDataReceived=allDataReceived && rssiReceiptFlags[i];
       }
-    }
+
+      //Checks to see if all the data is received. If so, sends out a broadcast signal
+      if(allDataReceived)
+      {    
+        return 1;
+      }
+      else
+      {
+         return 0;
+      }
+   }
 }
-
-
 
 /**
  * This is the method called by all the nodes in the setup
  * to broadcast and then receive an acknowledgement.
  */
-void receiveAcknowledge()
+int receiveAcknowledge()
 {
   //BROADCAST
   Serial.println();
   Serial.println("Broadcasting ID to NODE 1.");
   uint8_t waitToReceive = 0;
 
-    //Broadcast the message to all other reachable nodes.
+  //Broadcast the message to all other reachable nodes.
   if (manager.sendtoWait(data, sizeof(data), CLIENT_ADDRESS))
   {
     delay(1000);
@@ -353,6 +386,7 @@ void receiveAcknowledge()
         {
           Serial.println("RECEIVED AN ACKNOWLEDGEMENT");
           waitToReceive = 1;
+          return 1;
         }
         else
         {
@@ -364,6 +398,7 @@ void receiveAcknowledge()
   }
   else
     Serial.println("sendtoWait failed");
+    return 0;
 }
 
 /**
