@@ -1,4 +1,3 @@
-
 #include <RHReliableDatagram.h>
 #include <RH_RF22.h>
 #include <SPI.h>
@@ -20,56 +19,49 @@ uint8_t data[NUMBER_OF_NODES+10];
 uint8_t rssiReceiptFlags[NUMBER_OF_NODES-1];
 uint8_t buf[RH_RF22_MAX_MESSAGE_LEN];
 
-RHReliableDatagram manager(driver, CLIENT_ADDRESS);
+RHReliableDatagram manager(driver, NODE_2_ADDRESS);
+
 
 void setup() 
 {
-   Serial.begin(9600);
+  Serial.begin(9600);
   if (!manager.init())
-    Serial.println("init failed");
+   Serial.println("init failed");
   // Defaults after init are 434.0MHz, 0.05MHz AFC pull-in, modulation FSK_Rb2_4Fd36
 }
 
 void loop() 
 {
-  //BROADCAST
-  Serial.println();
-  Serial.println("Broadcasting ID to NODE 2.");
-  uint8_t waitToReceive = 0;
-
-    //Broadcast the message to all other reachable nodes.
-  if (manager.sendtoWait(data, sizeof(data), NODE_2_ADDRESS))
+  Serial.println(manager.available());
+  //RECEIVE
+  if (manager.available())
   {
-    Serial.println("Broadcast Successful");
-    Serial.print("My Address: ");
-    Serial.println(CLIENT_ADDRESS);
-    while(waitToReceive == 0)
+    Serial.println();
+    Serial.println("manager is available");
+    // Wait for a message addressed to us from the client
+    uint8_t sendtoWait = 0;
+    uint8_t len = sizeof(buf);
+    uint8_t from;
+    uint8_t to;
+    int8_t rssi;
+    if (manager.recvfromAck(buf, &len, &from, &to))
     {
-     if (manager.available())
-     {
-        Serial.println("manager is available");
-        // Wait for a message addressed to us from the client
-        uint8_t len = sizeof(buf);
-        uint8_t from;
-        uint8_t to;
-        int8_t rssi;
-        if (manager.recvfromAck(buf, &len, &from, &to))
+      Serial.println("Received RSSI From M2");  
+      while(sendtoWait == 0)
+      {
+        if(manager.sendtoWait(data, sizeof(data), CLIENT_ADDRESS))
         {
-          Serial.println(from);
-          Serial.println("RECEIVED AN ACKNOWLEDGEMENT");
-          waitToReceive = 1;
+          Serial.println("success");
+          sendtoWait = 1;
         }
         else
         {
-          Serial.println("DID NOT RECEIVE AN ACKNOWLEGEMENT");
-          waitToReceive = 0;
+          Serial.println("keep going");
+          sendtoWait = 0;
         }
-     }
+      }
     }
   }
-  else
-    Serial.println("sendtoWait failed");
-
   delay(1000);
-}
+ }
 
