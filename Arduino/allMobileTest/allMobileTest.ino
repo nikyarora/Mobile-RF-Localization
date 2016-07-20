@@ -24,6 +24,7 @@ RH_RF22 driver;
 
 //#define CLIENT_ADDRESS NODE_1_ADDRESS
 #define CLIENT_ADDRESS NODE_2_ADDRESS
+uint8_t currentNodeBroadcasting = NODE_1_ADDRESS;
 
 uint8_t data[NUMBER_OF_NODES+10];
 uint8_t rssiReceiptFlags[NUMBER_OF_NODES-1];
@@ -214,12 +215,15 @@ void loop()
 
       //Checks to see if all the data is received. If so, sends out a broadcast signal
       if(allDataReceived)
-      {    
-         broadcast();
+      {   
         for (int i=0; i<NUMBER_OF_NODES-1; i++)
         {
           data[i] = 0;
           rssiReceiptFlags[i] = 0;
+        } 
+        if(currentNodeBroadcasting == CLIENT_ADDRESS)
+        {
+          broadcast();
         }
       }
     }
@@ -444,6 +448,14 @@ int receiveAcknowledge()
  */
 void broadcast()
 {  
+  if(currentNodeBroadcasting == NUMBER_OF_NODES)
+  {
+     currentNodeBroadcasting = NODE_1_ADDRESS;
+  }
+  else
+  {
+    currentNodeBroadcasting++;
+  }
   //BROADCAST
   Serial.println();
   Serial.println("Broadcasting ID to all receiving nodes.");
