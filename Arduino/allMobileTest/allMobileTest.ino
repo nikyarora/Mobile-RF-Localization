@@ -127,10 +127,12 @@ void loop()
         {
             if(manager.sendtoWait(data, sizeof(data),from))
             {
+              Serial.println("hello yay");
               sendtoWait = 1;
             }
             else
             {
+              Serial.println("hello");
               sendtoWait = 0;
             }
         }
