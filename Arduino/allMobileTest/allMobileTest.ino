@@ -23,7 +23,7 @@
 RH_RF22 driver;
 
 //#define CLIENT_ADDRESS NODE_1_ADDRESS
-#define CLIENT_ADDRESS NODE_2_ADDRESS
+#define CLIENT_ADDRESS NODE_1_ADDRESS
 uint8_t currentNodeBroadcasting = NODE_1_ADDRESS;
 
 uint8_t data[NUMBER_OF_NODES+10];
@@ -62,31 +62,7 @@ void setup()
 
     broadcast();
   }
-  else if(CLIENT_ADDRESS == 0x02)
-  {
-    uint8_t broadcastSuccessful = 0;
-    while(broadcastSuccessful == 0)
-    {
-      broadcastSuccessful = receiveAcknowledge();
-    }
-  }
-  else if(CLIENT_ADDRESS == 0x03)
-  {
-    uint8_t broadcastSuccessful = 0;
-    while(broadcastSuccessful == 0)
-    {
-      broadcastSuccessful = receiveAcknowledge();
-    }
-  }
-  else if(CLIENT_ADDRESS == 0x04)
-  {
-    uint8_t broadcastSuccessful = 0;
-    while(broadcastSuccessful == 0)
-    {
-      broadcastSuccessful = receiveAcknowledge();
-    }
-  }
-  else if(CLIENT_ADDRESS == 0x05)
+  else
   {
     uint8_t broadcastSuccessful = 0;
     while(broadcastSuccessful == 0)
@@ -123,57 +99,18 @@ void loop()
         data[0] = buf[1];
         Serial.println(data[0]);
         rssiReceiptFlags [0] = 1;
-        while(sendtoWait == 0)
-        {
-            if(manager.sendtoWait(data, sizeof(data),from))
-            {
-              Serial.println("hello yay");
-              sendtoWait = 1;
-            }
-            else
-            {
-              Serial.println("hello");
-              sendtoWait = 0;
-            }
-        }
         
         case NODE_2_ADDRESS:
         Serial.println("Received RSSI From M2");  
         data[1] = buf[1];
         Serial.println(data[1]);
         rssiReceiptFlags [1] = 1;
-        while(sendtoWait == 0)
-        {
-            if(manager.sendtoWait(data, sizeof(data), from))
-            {
-              Serial.println("hello yay");
-              sendtoWait = 1;
-            }
-            else
-            {
-              Serial.println("hello");
-              sendtoWait = 0;
-            }
-        }
-        break;
-        
+      
         case NODE_3_ADDRESS:
         Serial.println("Received RSSI From M3");  
         data[2] = buf[1];
         Serial.println(data[2]);
         rssiReceiptFlags [2] = 1;
-        while(sendtoWait == 0)
-        {
-            if(manager.sendtoWait(data, sizeof(data), from))
-            {
-              sendtoWait = 1;
-            }
-            else
-            {
-              sendtoWait = 0;
-            }
-        }
-        break;
         
         /**case NODE_4_ADDRESS:
         Serial.println("Received RSSI From M4");  
@@ -461,64 +398,18 @@ void broadcast()
     currentNodeBroadcasting++;
   }
 
-  uint8_t recvAckFromAllNodes = 0;
-  while(recvAckFromAllNodes == 0)
-  {
-    //BROADCAST
-    Serial.println();
-    Serial.println("Broadcasting ID to all receiving nodes.");
-  
-    //Broadcast the message to all other reachable nodes.
-    if (manager.sendtoWait(data, sizeof(data), RH_BROADCAST_ADDRESS))
-    {
-      Serial.println("Broadcast Successful");
-      Serial.print("My Address: ");
-      Serial.println(CLIENT_ADDRESS);
-    }
-    else
-      Serial.println("sendtoWait failed");
-
-    if (manager.available())
-    {
-      // Wait for a message addressed to us from the client
-      uint8_t len = sizeof(buf);
-      uint8_t from;
-      uint8_t to;
-      int8_t rssi;
-      if (manager.recvfromAck(buf, &len, &from, &to))
-      {
-          switch (from) 
-          {
-            case NODE_2_ADDRESS:
-            Serial.println("Received From M2");
-            rssiReceiptFlags [0] = 1;
-            break;
-            
-            case NODE_3_ADDRESS:
-            Serial.println("Received From M3");  
-            rssiReceiptFlags [1] = 1;
-            break;
-          }
-      }
-      
-      uint8_t allAckRecv=1;
-      for (int i=0; i<NUMBER_OF_NODES-1; i++)
-      {
-        allAckRecv = allAckRecv && rssiReceiptFlags[i];
-      }
-
-      //Checks to see if all the data is received. If so, sends out a broadcast signal
-      if(allAckRecv)
-      {    
-        recvAckFromAllNodes = 1;
-      }
-      else
-      {
-        recvAckFromAllNodes = 0;
-      }
-
-    }
-  }
+   //BROADCAST
+   Serial.println();
+   Serial.println("Broadcasting ID to all receiving nodes.");
+   //Broadcast the message to all other reachable nodes.    
+   if (manager.sendtoWait(data, sizeof(data), RH_BROADCAST_ADDRESS))
+   {
+     Serial.println("Broadcast Successful");
+     Serial.print("My Address: ");
+     Serial.println(CLIENT_ADDRESS);
+   }
+   else
+    Serial.println("sendtoWait failed");
 }
 
 
