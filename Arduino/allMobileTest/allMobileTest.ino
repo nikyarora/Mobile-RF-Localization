@@ -1,7 +1,7 @@
 #include <RHReliableDatagram.h>
 #include <RH_RF22.h>
 #include <SPI.h>
-#include <SimpleTimer.h>
+#include <Time.h>
 
 // Mobile_Node_Code.pde
 // -*- mode: C++ -*-
@@ -62,7 +62,7 @@ void setup()
     }
 
     myTurnToBroadcast = 1;
-    setTimer();
+    broadcast();
   }
   else
   {
@@ -101,6 +101,7 @@ void loop()
         data[0] = buf[1];
         Serial.println(data[0]);
         rssiReceiptFlags [0] = 1;
+        Serial.println(from);
         if(from == NUMBER_OF_NODES)
         {
           myTurnToBroadcast = 1;
@@ -111,6 +112,7 @@ void loop()
         data[1] = buf[1];
         Serial.println(data[1]);
         rssiReceiptFlags [1] = 1;
+        Serial.println(from);
         if(from == 1)
         {
           myTurnToBroadcast = 1;
@@ -121,6 +123,7 @@ void loop()
         data[2] = buf[1];
         Serial.println(data[2]);
         rssiReceiptFlags [2] = 1;
+        Serial.println(from);
         if(from == 2)
         {
           myTurnToBroadcast = 1;
@@ -176,10 +179,11 @@ void loop()
           data[i] = 0;
           rssiReceiptFlags[i] = 0;
         } 
+        Serial.print("MY TURN: ");
         Serial.println(myTurnToBroadcast);
         if(myTurnToBroadcast == 1)
         {
-          setTimer();
+          broadcast();
         }
       }
     }
@@ -402,29 +406,30 @@ int receiveAcknowledge()
 /**
  * This is the broadcasting method for the loop.
  */
-void setTimer()
-{ 
-  SimpleTimer timer;
-  int timerId = timer.setTimer(5000, broadcast, 3);
-  Serial.println(timer.isEnabled(timerId));
-}
 
 void broadcast()
 {
+  delay(1000);
   myTurnToBroadcast = 0;
-  Serial.println("in the broadcast");
-  //BROADCAST
-  Serial.println();
-  Serial.println("Broadcasting ID to all receiving nodes.");
-  //Broadcast the message to all other reachable nodes.    
-  if (manager.sendtoWait(data, sizeof(data), RH_BROADCAST_ADDRESS))
-  {
-    Serial.println("Broadcast Successful");
-    Serial.print("My Address: ");
-    Serial.println(CLIENT_ADDRESS);
-  }
-  else
-   Serial.println("sendtoWait failed"); 
+ // time_t t = now();
+  //time_t currentT = now();
+  //while(currentT - t < 1.5)
+  //{
+   // currentT = now();
+    Serial.println("in the broadcast");
+    //BROADCAST
+    Serial.println();
+    Serial.println("Broadcasting ID to all receiving nodes.");
+    //Broadcast the message to all other reachable nodes.    
+    if (manager.sendtoWait(data, sizeof(data), RH_BROADCAST_ADDRESS))
+    {
+      Serial.println("Broadcast Successful");
+      Serial.print("My Address: ");
+      Serial.println(CLIENT_ADDRESS);
+    }
+    else
+     Serial.println("sendtoWait failed"); 
+ // }
 }
 
 
