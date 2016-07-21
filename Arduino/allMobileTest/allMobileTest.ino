@@ -165,9 +165,6 @@ void loop()
         break; **/
         
       }
-      Serial.println("outside case");
-      Serial.print("Rssi receipt for node 1: ");
-      Serial.println(rssiReceiptFlags[0]);
       uint8_t allDataReceived=1;
       for (int i=0; i<NUMBER_OF_NODES-1; i++)
       {
