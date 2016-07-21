@@ -61,6 +61,7 @@ void setup()
        receiveSuccessful = receiveSetup();
     }
 
+    myTurnToBroadcast = 1;
     setTimer();
   }
   else
@@ -410,6 +411,7 @@ void setTimer()
 
 void broadcast()
 {
+  myTurnToBroadcast = 0;
   Serial.println("in the broadcast");
   //BROADCAST
   Serial.println();
