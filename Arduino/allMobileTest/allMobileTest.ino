@@ -24,7 +24,7 @@
 RH_RF22 driver;
 
 //#define CLIENT_ADDRESS NODE_1_ADDRESS
-#define CLIENT_ADDRESS NODE_2_ADDRESS
+#define CLIENT_ADDRESS NODE_1_ADDRESS
 uint8_t myTurnToBroadcast = 0;
 
 uint8_t data[NUMBER_OF_NODES+10];
@@ -111,14 +111,14 @@ void loop()
         Serial.println("Received RSSI From M2");  
         data[1] = buf[1];
         //Serial.println(data[1]);
-        rssiReceiptFlags [1] = 1;
+        rssiReceiptFlags [0] = 1;
         if(CLIENT_ADDRESS == NODE_1_ADDRESS)
         {
           myTurnToBroadcast = 1;
         }
         break;
       
-        case NODE_3_ADDRESS:
+        /**case NODE_3_ADDRESS:
         Serial.println("Received RSSI From M3");  
         data[2] = buf[1];
         //Serial.println(data[2]);
@@ -129,7 +129,7 @@ void loop()
         }
         break;
         
-        /**case NODE_4_ADDRESS:
+        case NODE_4_ADDRESS:
         Serial.println("Received RSSI From M4");  
         data[3] = buf[1];
         Serial.println(data[3]);
@@ -165,6 +165,9 @@ void loop()
         break; **/
         
       }
+      Serial.println("outside case");
+      Serial.print("Rssi receipt for node 1: ");
+      Serial.println(rssiReceiptFlags[0]);
       uint8_t allDataReceived=1;
       for (int i=0; i<NUMBER_OF_NODES-1; i++)
       {
@@ -230,7 +233,7 @@ int receiveSetup()
           }
           break;
           
-          case NODE_3_ADDRESS:
+          /**case NODE_3_ADDRESS:
           Serial.println("Received From M3");  
           rssiReceiptFlags [1] = 1;
           while(sendtoWait == 0)
@@ -248,7 +251,7 @@ int receiveSetup()
           }
           break;
           
-          /**case NODE_4_ADDRESS:
+          case NODE_4_ADDRESS:
           Serial.println("Received From M4");
           rssiReceiptFlags [2] = 1;
           while(sendtoWait == 0)
