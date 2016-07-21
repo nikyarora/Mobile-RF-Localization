@@ -11,7 +11,7 @@
 // Tested on Flymaple with sparkfun RFM22 wireless shield
 // Tested on ChiKit Uno32 with sparkfun RFM22 wireless shield
 
-#define CLIENT_ADDRESS 0x03
+#define CLIENT_ADDRESS 0x02
 // Singleton instance of the radio driver
 //#define MAIN_SERVER_ADDRESS 0xA0
 #define NODE_2_ADDRESS 0xA1  // 
