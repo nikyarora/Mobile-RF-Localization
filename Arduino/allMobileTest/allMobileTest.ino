@@ -23,7 +23,6 @@
 #define NUMBER_OF_NODES 4
 RH_RF22 driver;
 
-//#define CLIENT_ADDRESS NODE_1_ADDRESS
 #define CLIENT_ADDRESS NODE_1_ADDRESS
 uint8_t myTurnToBroadcast = 0;
 
@@ -79,7 +78,7 @@ void setup()
 
     if(CLIENT_ADDRESS != NUMBER_OF_NODES)
     {
-      for(int i = 1; i < NUMBER_OF_NODES - 1; i++)
+      for(int i = CLIENT_ADDRESS - 1; i < NUMBER_OF_NODES - 1; i++)
       {
         rssiReceiptFlags[i] = 1;
       }
@@ -92,7 +91,6 @@ void setup()
 void loop()
 {
   //RECEIVE
-  Serial.println("in the loop");
   if (manager.available())
   {
     // Wait for a message addressed to us from the client
@@ -111,8 +109,8 @@ void loop()
         switch (from) {
         case NODE_1_ADDRESS:
         Serial.println("Received RSSI From M1");  
-        data[0] = buf[1];
-        //Serial.println(data[0]);
+        data[0] = driver.lastRssi();
+        Serial.println(data[0]);
         rssiReceiptFlags [0] = 1;
         if(CLIENT_ADDRESS == NODE_2_ADDRESS)
         {
@@ -122,8 +120,8 @@ void loop()
         
         case NODE_2_ADDRESS:
         Serial.println("Received RSSI From M2");  
-        data[1] = buf[1];
-        //Serial.println(data[1]);
+        data[1] = driver.lastRssi();
+        Serial.println(data[1]);
         rssiReceiptFlags [0] = 1;
         if(CLIENT_ADDRESS == NODE_3_ADDRESS)
         {
@@ -133,8 +131,8 @@ void loop()
       
         case NODE_3_ADDRESS:
         Serial.println("Received RSSI From M3");  
-        data[2] = buf[1];
-        //Serial.println(data[2]);
+        data[2] = driver.lastRssi();
+        Serial.println(data[2]);
         rssiReceiptFlags [1] = 1;
         if(CLIENT_ADDRESS == NODE_4_ADDRESS)
         {
@@ -144,7 +142,7 @@ void loop()
         
         case NODE_4_ADDRESS:
         Serial.println("Received RSSI From M4");  
-        data[3] = buf[1];
+        data[3] = driver.lastRssi();
         Serial.println(data[3]);
         rssiReceiptFlags [2] = 1;
         if(CLIENT_ADDRESS == NODE_1_ADDRESS)
@@ -427,10 +425,9 @@ int receiveAcknowledge()
 
 void broadcast()
 {
+  //BROADCAST
   delay(3000);
   myTurnToBroadcast = 0;
-  Serial.println("in the broadcast");
-  //BROADCAST
   Serial.println();
   Serial.println("Broadcasting ID to all receiving nodes.");
   //Broadcast the message to all other reachable nodes.    
