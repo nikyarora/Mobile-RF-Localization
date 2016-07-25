@@ -13,14 +13,14 @@
 // Tested on ChiKit Uno32 with sparkfun RFM22 wireless shield
 
 #define NODE_1_ADDRESS 0x01
-#define NODE_2_ADDRESS 0x02 
-#define NODE_3_ADDRESS 0x03  
-#define NODE_4_ADDRESS 0x04  
-#define NODE_5_ADDRESS 0x05  
-#define NODE_6_ADDRESS 0x06  
-#define NODE_7_ADDRESS 0x07  
-#define NODE_8_ADDRESS 0x08  
-#define NUMBER_OF_NODES 2
+#define NODE_2_ADDRESS 0x02
+#define NODE_3_ADDRESS 0x03
+#define NODE_4_ADDRESS 0x04
+#define NODE_5_ADDRESS 0x05
+#define NODE_6_ADDRESS 0x06
+#define NODE_7_ADDRESS 0x07
+#define NODE_8_ADDRESS 0x08
+#define NUMBER_OF_NODES 4
 RH_RF22 driver;
 
 //#define CLIENT_ADDRESS NODE_1_ADDRESS
@@ -61,6 +61,11 @@ void setup()
        receiveSuccessful = receiveSetup();
     }
 
+    for (int i=0; i<NUMBER_OF_NODES-1; i++)
+    {
+      rssiReceiptFlags[i] = 0;
+    } 
+
     myTurnToBroadcast = 1;
     broadcast();
   }
@@ -70,6 +75,14 @@ void setup()
     while(broadcastSuccessful == 0)
     {
       broadcastSuccessful = receiveAcknowledge();
+    }
+
+    if(CLIENT_ADDRESS != NUMBER_OF_NODES)
+    {
+      for(int i = 1; i < NUMBER_OF_NODES - 1; i++)
+      {
+        rssiReceiptFlags[i] = 1;
+      }
     }
   }
 
@@ -112,18 +125,18 @@ void loop()
         data[1] = buf[1];
         //Serial.println(data[1]);
         rssiReceiptFlags [0] = 1;
-        if(CLIENT_ADDRESS == NODE_1_ADDRESS)
+        if(CLIENT_ADDRESS == NODE_3_ADDRESS)
         {
           myTurnToBroadcast = 1;
         }
         break;
       
-        /**case NODE_3_ADDRESS:
+        case NODE_3_ADDRESS:
         Serial.println("Received RSSI From M3");  
         data[2] = buf[1];
         //Serial.println(data[2]);
-        rssiReceiptFlags [2] = 1;
-        if(CLIENT_ADDRESS == NODE_1_ADDRESS)
+        rssiReceiptFlags [1] = 1;
+        if(CLIENT_ADDRESS == NODE_4_ADDRESS)
         {
           myTurnToBroadcast = 1;
         }
@@ -133,10 +146,14 @@ void loop()
         Serial.println("Received RSSI From M4");  
         data[3] = buf[1];
         Serial.println(data[3]);
-        rssiReceiptFlags [3] = 1;
+        rssiReceiptFlags [2] = 1;
+        if(CLIENT_ADDRESS == NODE_1_ADDRESS)
+        {
+          myTurnToBroadcast = 1;
+        }
         break;
         
-        case NODE_5_ADDRESS:
+        /**case NODE_5_ADDRESS:
         Serial.println("Received RSSI From M5");  
         data[4] = buf[1];
         Serial.println(data[4]);
@@ -165,6 +182,7 @@ void loop()
         break; **/
         
       }
+
       uint8_t allDataReceived=1;
       for (int i=0; i<NUMBER_OF_NODES-1; i++)
       {
@@ -230,7 +248,7 @@ int receiveSetup()
           }
           break;
           
-          /**case NODE_3_ADDRESS:
+          case NODE_3_ADDRESS:
           Serial.println("Received From M3");  
           rssiReceiptFlags [1] = 1;
           while(sendtoWait == 0)
@@ -266,7 +284,7 @@ int receiveSetup()
           }
           break;
           
-          case NODE_5_ADDRESS:
+          /**case NODE_5_ADDRESS:
           Serial.println("Received From M5");  
           rssiReceiptFlags [3] = 1;
           while(sendtoWait == 0)
@@ -409,27 +427,21 @@ int receiveAcknowledge()
 
 void broadcast()
 {
-  delay(1000);
+  delay(3000);
   myTurnToBroadcast = 0;
- // time_t t = now();
-  //time_t currentT = now();
-  //while(currentT - t < 1.5)
-  //{
-   // currentT = now();
-    Serial.println("in the broadcast");
-    //BROADCAST
-    Serial.println();
-    Serial.println("Broadcasting ID to all receiving nodes.");
-    //Broadcast the message to all other reachable nodes.    
-    if (manager.sendtoWait(data, sizeof(data), RH_BROADCAST_ADDRESS))
-    {
-      Serial.println("Broadcast Successful");
-      Serial.print("My Address: ");
-      Serial.println(CLIENT_ADDRESS);
-    }
-    else
-     Serial.println("sendtoWait failed"); 
- // }
+  Serial.println("in the broadcast");
+  //BROADCAST
+  Serial.println();
+  Serial.println("Broadcasting ID to all receiving nodes.");
+  //Broadcast the message to all other reachable nodes.    
+  if (manager.sendtoWait(data, sizeof(data), RH_BROADCAST_ADDRESS))
+  {
+    Serial.println("Broadcast Successful");
+    Serial.print("My Address: ");
+    Serial.println(CLIENT_ADDRESS);
+  }
+  else
+   Serial.println("sendtoWait failed"); 
 }
 
 
