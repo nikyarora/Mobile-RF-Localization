@@ -41,7 +41,7 @@ int generateMatrices(int m, char *ptr, char *ptr2, char **ptr3cal, double xi, do
   {
     double linearM[] = {2*(xi-xnew[i])/(pow(xi-xnew[i],2)+pow(yi-ynew[i],2)), 2*(yi-ynew[i])/(pow(xi-xnew[i],2)+pow(yi-ynew[i],2))};
     //A[i];//do something
-    C[i] = (-ptr3cal[i][1]-25.2-20 * log(sqrt(pow(xi-xnew[i],2) + (pow(yi-ynew[i],2))),10)) / ptr3cal[i][0];
+    C[i] = (-ptr3cal[i][1]-25.2-20 * log10(sqrt(pow(xi-xnew[i],2) + pow(yi-ynew[i],2))) / ptr3cal[i][0]);
     B[i] = 1/ptr3cal[i][0];
   }
 
