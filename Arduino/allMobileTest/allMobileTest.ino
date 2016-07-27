@@ -23,7 +23,7 @@
 #define NUMBER_OF_NODES 4
 RH_RF22 driver;
 
-#define CLIENT_ADDRESS NODE_1_ADDRESS
+#define CLIENT_ADDRESS NODE_4_ADDRESS
 uint8_t myTurnToBroadcast = 0;
 
 uint8_t data[NUMBER_OF_NODES+10];
@@ -122,7 +122,7 @@ void loop()
         Serial.println("Received RSSI From M2");  
         data[1] = driver.lastRssi();
         Serial.println(data[1]);
-        rssiReceiptFlags [0] = 1;
+        rssiReceiptFlags [1] = 1;
         if(CLIENT_ADDRESS == NODE_3_ADDRESS)
         {
           myTurnToBroadcast = 1;
@@ -133,7 +133,7 @@ void loop()
         Serial.println("Received RSSI From M3");  
         data[2] = driver.lastRssi();
         Serial.println(data[2]);
-        rssiReceiptFlags [1] = 1;
+        rssiReceiptFlags [2] = 1;
         if(CLIENT_ADDRESS == NODE_4_ADDRESS)
         {
           myTurnToBroadcast = 1;
