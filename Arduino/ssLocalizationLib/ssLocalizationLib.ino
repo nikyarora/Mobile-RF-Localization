@@ -1,6 +1,8 @@
 #include <MatrixMath.h>
 #include <math.h>
 
+#define num_nodes 2; 
+
 void setup() 
 {
 }
@@ -9,12 +11,13 @@ void loop()
 {
 }
 
-double generateMatrices(int m, char *ptr, char *ptr2, char **ptr3cal, double xi, double yi)
+void generateMatrices(int m, char *ptr, char *ptr2, char **ptr3cal, double xi, double yi, char A[num_nodes][2],char B[num_nodes][1],char C[num_nodes][1])
 {
+  int m = num_nodes;
   int n = 2;
-  double A[m][n];
-  double B[m];
-  double C[m][1];
+ // double A[m][n];
+  //double B[m];
+  //double C[m][1];
   for(int i = 0; i < m; i++)
   {
     for(int j = 0; j < n; j++)
@@ -76,15 +79,6 @@ double generateMatrices(int m, char *ptr, char *ptr2, char **ptr3cal, double xi,
        Cnew[n*i+j][j] = C[n*i+j][j] + finalarr[n*i+j][j];
      }
   }
-
-  double **pA;
-  double *pB;
-  double **pC;
-
-  pA = A;
-  pB = B;
-  pC = C;
-  return (pA, pB, pC);
 }
 
 
