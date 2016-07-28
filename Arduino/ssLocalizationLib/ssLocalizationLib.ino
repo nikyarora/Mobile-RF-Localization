@@ -9,7 +9,7 @@ void loop()
 {
 }
 
-int generateMatrices(int m, char *ptr, char *ptr2, char **ptr3cal, double xi, double yi)
+double generateMatrices(int m, char *ptr, char *ptr2, char **ptr3cal, double xi, double yi)
 {
   int n = 2;
   double A[m][n];
@@ -77,7 +77,14 @@ int generateMatrices(int m, char *ptr, char *ptr2, char **ptr3cal, double xi, do
      }
   }
 
- //return [A,B,C]
+  double **pA;
+  double *pB;
+  double **pC;
+
+  pA = A;
+  pB = B;
+  pC = C;
+  return (pA, pB, pC);
 }
 
 
