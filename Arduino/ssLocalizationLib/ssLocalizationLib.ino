@@ -12,9 +12,9 @@ void loop()
 int generateMatrices(int m, char *ptr, char *ptr2, char **ptr3cal, double xi, double yi)
 {
   int n = 2;
-  float A[m][n];
-  float B[m];
-  float C[m];
+  double A[m][n];
+  double B[m];
+  double C[m][1];
   for(int i = 0; i < m; i++)
   {
     for(int j = 0; j < n; j++)
@@ -48,9 +48,25 @@ int generateMatrices(int m, char *ptr, char *ptr2, char **ptr3cal, double xi, do
     B[i] = 1/ptr3cal[i][0];
   }
 
- double arr[] = {-xi, -yi};
+ double arr[2][1] = {
+    {-xi},
+    {-yi}
+  };
 
- //C = C + numpy.dot(A,arr)
+  double finalarr[m][n];
+  
+  for (int i = 0; i < m; i++)
+  {
+    for(int j = 0; j < 1; j++)
+    {
+      finalarr[1*i+j] = 0;
+      for (int k = 0; k < n; k++)
+      {
+        finalarr[1*i+j] = finalarr[1*i+j] + A[n*i+k] * arr[1*k+j];
+      }
+    }
+  }
+ //C = C + numpy.dot(A,arr);
 
  //return [A,B,C]
 }
