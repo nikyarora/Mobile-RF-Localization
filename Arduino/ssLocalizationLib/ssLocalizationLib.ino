@@ -40,14 +40,19 @@ int generateMatrices(int m, char *ptr, char *ptr2, char **ptr3cal, double xi, do
   for(int i = 0; i < n; i++)
   {
     double linearM[] = {2*(xi-xnew[i])/(pow(xi-xnew[i],2)+pow(yi-ynew[i],2)), 2*(yi-ynew[i])/(pow(xi-xnew[i],2)+pow(yi-ynew[i],2))};
-    //A[i];//do something
+    for(int j = 0; j < m; j++)
+    {
+      A[i][j] = -10.0 /ptr3cal[i][0]* linearM[i];
+    }
     C[i] = (-ptr3cal[i][1]-25.2-20 * log10(sqrt(pow(xi-xnew[i],2) + pow(yi-ynew[i],2))) / ptr3cal[i][0]);
     B[i] = 1/ptr3cal[i][0];
   }
 
- // C = C; // + something
+ double arr[] = {-xi, -yi};
 
-  return 0;
+ //C = C + numpy.dot(A,arr)
+
+ //return [A,B,C]
 }
 
 
