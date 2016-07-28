@@ -37,10 +37,10 @@ int generateMatrices(int m, char *ptr, char *ptr2, char **ptr3cal, double xi, do
       }
   }
 
-  for(int i = 0; i < n; i++)
+  for(int i = 0; i < m; i++)
   {
     double linearM[] = {2*(xi-xnew[i])/(pow(xi-xnew[i],2)+pow(yi-ynew[i],2)), 2*(yi-ynew[i])/(pow(xi-xnew[i],2)+pow(yi-ynew[i],2))};
-    for(int j = 0; j < m; j++)
+    for(int j = 0; j < n; j++)
     {
       A[i][j] = -10.0 /ptr3cal[i][0]* linearM[i];
     }
