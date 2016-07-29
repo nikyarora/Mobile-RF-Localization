@@ -21,16 +21,40 @@ void setup()
   double C[xsize][1];
   generateMatrices(x, y, cal, xi, yi, A, B, C);
 
-  //Serial.println(A);
-  //Serial.println(B);
-  //Serial.println(C);
+  Serial.println();
+  int n = num_nodes;
+  Serial.println("A");
+  for (int i = 0; i < xsize; i++)
+  {
+    for (int j = 0; j < n; j++)
+    {
+      Serial.println(A[i][j]);
+    }
+  }
+
+  Serial.println();
+  Serial.println("B");
+  for (int i = 0; i < xsize; i++)
+  {
+    Serial.println(B[i]);
+  }
+
+  Serial.println();
+  Serial.println("C");
+  for (int i = 0; i < xsize; i++)
+  {
+    for (int j = 0; j < n; j++)
+    {
+      Serial.println(C[i][j]);
+    }
+  }
 }
 
 void loop() 
 {
 }
 
-void generateMatrices(char *ptrx, char *ptry, char **ptrcal, double xi, double yi, double A[num_nodes][2], double B[num_nodes],double C[num_nodes][1])
+void generateMatrices(char *ptrx, char *ptry, char ptrcal[][num_nodes], double xi, double yi, double A[num_nodes][2], double B[num_nodes],double C[num_nodes][1])
 {
   int m = num_nodes;
   int n = 2;
