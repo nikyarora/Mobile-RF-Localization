@@ -1,7 +1,7 @@
 #include <MatrixMath.h>
 #include <math.h>
 
-#define num_nodes 2; 
+#define num_nodes 2
 
 void setup() 
 {
@@ -11,7 +11,7 @@ void loop()
 {
 }
 
-void generateMatrices(int m, char *ptr, char *ptr2, char **ptr3cal, double xi, double yi, char A[num_nodes][2],char B[num_nodes][1],char C[num_nodes][1])
+void generateMatrices(char *ptr, char *ptr2, char **ptr3cal, double xi, double yi, double A[num_nodes][2], double B[num_nodes],double C[num_nodes][1])
 {
   int m = num_nodes;
   int n = 2;
