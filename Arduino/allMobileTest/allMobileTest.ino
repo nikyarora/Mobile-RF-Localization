@@ -258,6 +258,32 @@ void loop()
   delay(1000);
 }
 
+/*****************************************************************BROADCAST********************************************************************/
+
+/**
+ * This is the broadcasting method for the loop.
+ */
+void broadcast()
+{
+  //BROADCAST
+  delay(3000);
+  myTurnToBroadcast = 0;
+  Serial.println();
+  Serial.println("Broadcasting ID to all receiving nodes.");
+  //Broadcast the message to all other reachable nodes.    
+  if (manager.sendtoWait(data, sizeof(data), RH_BROADCAST_ADDRESS))
+  {
+    Serial.println("Broadcast Successful");
+    Serial.print("My Address: ");
+    Serial.println(CLIENT_ADDRESS);
+  }
+  else
+   Serial.println("sendtoWait failed"); 
+}
+
+
+/*****************************************************************SETUP FUNCTIONS********************************************************************/
+ 
 /*
  * This is the method that is called by Node 1 in the setup
  * The first node receives from each active broadcasting node
@@ -468,27 +494,8 @@ int receiveAcknowledge()
     return 0;
 }
 
-/**
- * This is the broadcasting method for the loop.
- */
 
-void broadcast()
-{
-  //BROADCAST
-  delay(3000);
-  myTurnToBroadcast = 0;
-  Serial.println();
-  Serial.println("Broadcasting ID to all receiving nodes.");
-  //Broadcast the message to all other reachable nodes.    
-  if (manager.sendtoWait(data, sizeof(data), RH_BROADCAST_ADDRESS))
-  {
-    Serial.println("Broadcast Successful");
-    Serial.print("My Address: ");
-    Serial.println(CLIENT_ADDRESS);
-  }
-  else
-   Serial.println("sendtoWait failed"); 
-}
+/*****************************************************************CALIBRATION and GENERATE MATRICES********************************************************************/
 
 /**
  * This is the generate matrices function that has all the math equations to 
