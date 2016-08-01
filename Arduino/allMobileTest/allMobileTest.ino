@@ -2,6 +2,8 @@
 #include <RH_RF22.h>
 #include <SPI.h>
 #include <Time.h>
+#include <MatrixMath.h>
+#include <math.h>
 
 // Mobile_Node_Code.pde
 // -*- mode: C++ -*-
@@ -23,17 +25,40 @@
 #define NUMBER_OF_NODES 4
 RH_RF22 driver;
 
+//This is the address of THIS node  
 #define CLIENT_ADDRESS NODE_4_ADDRESS
+
+//GENERATE MATRICES VALUES
+#define xsize 3
+#define ysize 3
+double xi = 2.0;
+double yi = 3.0;
+double A[xsize][NUMBER_OF_NODES - 1];
+double B[xsize][1];
+double C[xsize][1];
+
+//CALIBRATION STUFF
+char x[xsize] = {14, 5, 7};
+char y[ysize] = {9, 12, 11};
+double cal[xsize][NUMBER_OF_NODES - 1] = {
+    {1, 2},
+    {3, 4},
+    {5, 6}
+  };
+
+//Tells node whether it has received from all the other nodes
 uint8_t myTurnToBroadcast = 0;
 
 uint8_t data[NUMBER_OF_NODES+10];
 uint8_t rssiReceiptFlags[NUMBER_OF_NODES-1];
 uint8_t buf[RH_RF22_MAX_MESSAGE_LEN];
-//uint8_t data[] = {CLIENT_ADDRESS};
 
 // Class to manage message delivery and receipt, using the driver declared above
 RHReliableDatagram manager(driver, CLIENT_ADDRESS);
 
+/**
+ * This is the setup. The nodes are all setup here and then exit to the loop.
+ */
 void setup() 
 {
   Serial.begin(9600);
@@ -41,6 +66,7 @@ void setup()
     Serial.println("init failed");
   // Defaults after init are 434.0MHz, 0.05MHz AFC pull-in, modulation FSK_Rb2_4Fd36
 
+  //Indicates the RSSI values from each node.
   for (int i=0; i<NUMBER_OF_NODES; i++)
   {
     data[i]=0;
@@ -52,6 +78,7 @@ void setup()
     rssiReceiptFlags[i]=0;
   }
 
+  //If this is the first node, broadcast and wait for an acknowledgment
   if(CLIENT_ADDRESS == 0x01)
   {
     uint8_t receiveSuccessful = 0;
@@ -59,6 +86,8 @@ void setup()
     {
        receiveSuccessful = receiveSetup();
     }
+
+    generateMatrices(x, y, cal, xi, yi, A, B, C);
 
     for (int i=0; i<NUMBER_OF_NODES-1; i++)
     {
@@ -68,6 +97,8 @@ void setup()
     myTurnToBroadcast = 1;
     broadcast();
   }
+  
+  //if not the first node, wait for a broadcast and then acknowledge
   else
   {
     uint8_t broadcastSuccessful = 0;
@@ -76,6 +107,7 @@ void setup()
       broadcastSuccessful = receiveAcknowledge();
     }
 
+    //fills the rssiReceiptFlags for nodes that must broadcast before receiving from all
     if(CLIENT_ADDRESS != NUMBER_OF_NODES)
     {
       for(int i = CLIENT_ADDRESS - 1; i < NUMBER_OF_NODES - 1; i++)
@@ -84,10 +116,12 @@ void setup()
       }
     }
   }
-
-  Serial.println("Done with setup");
 }
 
+/**
+ * This is the loop. Each node waits to receive from all the other nodes and
+ * then exits the loop to broadcast.
+ */
 void loop()
 {
   //RECEIVE
@@ -181,10 +215,25 @@ void loop()
         
       }
 
+      //Check if all the data is received
       uint8_t allDataReceived=1;
       for (int i=0; i<NUMBER_OF_NODES-1; i++)
       {
         allDataReceived=allDataReceived && rssiReceiptFlags[i];
+      }
+
+      //Generate Matrices Stuff
+      if(CLIENT_ADDRESS == 0x01)
+      {
+        if(myTurnToBroadcast)
+        {
+          double rssiValues[xsize][1];
+          for(int i = 0; i < NUMBER_OF_NODES - 1; i++)
+          {
+            rssiValues[i][0] = data[i];
+          }
+          //xi = pow(A, -1) * (rssiValues - B - C);
+        }
       }
 
       //Checks to see if all the data is received. If so, sends out a broadcast signal
@@ -440,5 +489,61 @@ void broadcast()
   else
    Serial.println("sendtoWait failed"); 
 }
+
+/**
+ * This is the generate matrices function that has all the math equations to 
+ * calculate the distances from the RSSI values.
+ */
+void generateMatrices(char ptrx[xsize], char ptry[ysize], double ptrcal[xsize][NUMBER_OF_NODES - 1], double xi, double yi, double A[xsize][NUMBER_OF_NODES - 1], double B[xsize][1],double C[xsize][1])
+{
+  int m = xsize;
+  int n = 2;
+  for(int i = 0; i < m; i++)
+  {
+    for(int j = 0; j < n; j++)
+    {
+      A[i][j] = 0.0;
+    }
+
+    B[i][0] = 0.0;
+    C[i][0] = 0.0;
+  }
+
+  for(int i = 0; i < m; i++)
+  {
+    double linearM[] = {2*(xi-ptrx[i])/(pow(xi-ptrx[i],2)+pow(yi-ptry[i],2)), 2*(yi-ptry[i])/(pow(xi-ptrx[i],2)+pow(yi-ptry[i],2))};
+    for(int j = 0; j < n; j++)
+    {
+      A[i][j] = (-10.0 /ptrcal[i][0]) * linearM[j];
+    }
+    C[i][0] = (-ptrcal[i][1]-25.2-20 * log10(sqrt(pow(xi-ptrx[i],2) + pow(yi-ptry[i],2))) / ptrcal[i][0]);
+    B[i][0] = 1/ptrcal[i][0];
+  }
+
+ double arr[2][1] = {
+    {-xi},
+    {-yi}
+  };
+
+  double finalarr[m][1];
+  
+  for (int i = 0; i < m; i++)
+  {
+    finalarr[i][0] = 0.0;
+    for (int k = 0; k < n; k++)
+    {
+      finalarr[i][0] = finalarr[i][0] + (A[i][k] * arr[k][0]);
+      Serial.println(finalarr[i][0]);
+    }
+  }
+  
+  for (int i = 0; i < m; i++)
+  {
+    C[i][0] = C[i][0] + finalarr[i][0];
+  }
+}
+
+
+
 
 
