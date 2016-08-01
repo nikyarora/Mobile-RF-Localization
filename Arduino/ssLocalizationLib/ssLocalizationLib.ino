@@ -3,14 +3,15 @@
 
 #define num_nodes 2
 #define xsize 3
+#define ysize 3
 
 void setup() 
 {
   Serial.begin(9600);
   
-  char x[xsize] = {2, 3, 4};
-  char y[xsize] = {1, 2, 3};
-  char cal[2][2] = {
+  char x[1][xsize] = {14, 3, 7};
+  char y[1][ysize] = {9, 2, 11};
+  double cal[2][2] = {
     {1, 2},
     {3, 4}
   };
@@ -54,9 +55,9 @@ void loop()
 {
 }
 
-void generateMatrices(char *ptrx, char *ptry, char ptrcal[][num_nodes], double xi, double yi, double A[num_nodes][2], double B[num_nodes],double C[num_nodes][1])
+void generateMatrices(char ptrx[1][xsize], char ptry[1][ysize], double ptrcal[][num_nodes], double xi, double yi, double A[xsize][2], double B[xsize],double C[xsize][1])
 {
-  int m = num_nodes;
+  int m = xsize;
   int n = 2;
   for(int i = 0; i < m; i++)
   {
@@ -69,23 +70,23 @@ void generateMatrices(char *ptrx, char *ptry, char ptrcal[][num_nodes], double x
     C[i][0] = 0.0;
   }
   
-  char xnew[n];
-  char ynew[n];
+  char xnew[m][1];
+  char ynew[m][1];
   for (int i = 0; i < m; i++)
   {
-      for(int j = 0; j < n; j++)
+      for(int j = 0; j < 1; j++)
       {
         xnew[m*j + i] = ptrx[n*i + j];
         ynew[m*j + i] = ptry[n*i + j];
       }
   }
 
-  for(int i = 0; i < m; i++)
+  for(int i = 0; i < n; i++)
   {
     double linearM[] = {2*(xi-xnew[i])/(pow(xi-xnew[i],2)+pow(yi-ynew[i],2)), 2*(yi-ynew[i])/(pow(xi-xnew[i],2)+pow(yi-ynew[i],2))};
-    for(int j = 0; j < n; j++)
+    for(int j = 0; j < m; j++)
     {
-      A[i][j] = -10.0 /ptrcal[i][0]* linearM[i];
+      A[i][j] = (-10.0 /ptrcal[i][0]) * linearM[j];
     }
     C[i][0] = (-ptrcal[i][1]-25.2-20 * log10(sqrt(pow(xi-xnew[i],2) + pow(yi-ynew[i],2))) / ptrcal[i][0]);
     B[i] = 1/ptrcal[i][0];
@@ -109,14 +110,12 @@ void generateMatrices(char *ptrx, char *ptry, char ptrcal[][num_nodes], double x
       }
     }
   }
-
-  double Cnew[m][n];
-
+  
   for (int i = 0; i < m; i++)
   {
      for(int j = 0; j < n; j++)
      {
-       Cnew[n*i+j][j] = C[n*i+j][j] + finalarr[n*i+j][j];
+       C[n*i+j][j] = C[n*i+j][j] + finalarr[n*i+j][j];
      }
   }
 }
