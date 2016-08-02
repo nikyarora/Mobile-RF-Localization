@@ -8,9 +8,9 @@ class ssLocalizationLib
   public:
     //ssLocalizationLib();
     void generateMatrices();
-    float add();
-    float subtract();
-    float multiply();
+    void add();
+    void subtract();
+    void multiply();
   //private:
 };
 

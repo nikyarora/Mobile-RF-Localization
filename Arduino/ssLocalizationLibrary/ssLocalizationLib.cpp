@@ -32,34 +32,34 @@ void ssLocalizationLib::generateMatrices(float ptrx[xsize], float ptry[ysize], f
     {-yi}
   };
 
+  float arr2[m][1];
+
+  multiply(A, arr, m, n, arr2);
+
   float finalarr[m][1];
 
-  finalarr = add(finalarr, (multiply(A, arr, m, n, returnarr)), m, returnarr);
+  add(finalarr, arr2, m, finalarr);
   
-  C = add(C, finalarr, m, addArray);
+  add(C, finalarr, m, C);
 }
 
-float ssLocalizationLib::add(float arr1, float arr2, int m, float finalarr)
+void ssLocalizationLib::add(float arr1[m][1], float arr2[m][1], int m, float finalarr[m][1])
 {
   for (int i = 0; i < m; i++)
   {
     finalarr[i][0] = arr1[i][0] + arr2[i][0];
   }  
-
-  return finalarr;
 }
 
-float ssLocalizationLib::subtract(float arr1, float arr2, int m, float finalarr)
+void ssLocalizationLib::subtract(float arr[m][1], float arr2[m][1], int m, float finalarr[m][1])
 {
   for (int i = 0; i < m; i++)
   {
     finalarr[i][0] = arr1[i][0] - arr2[i][0];
   }  
-
-  return finalarr;
 }
 
-float ssLocalizationLib::multiply(float arr1, float arr2, int m, int n, float finalarr)
+void ssLocalizationLib::multiply(float arr1[m][n], float arr2[n][1], int m, int n, float finalarr[m][1])
 {
   for (int i = 0; i < m; i++)
   {
@@ -69,7 +69,5 @@ float ssLocalizationLib::multiply(float arr1, float arr2, int m, int n, float fi
       finalarr[i][0] = finalarr[i][0] + (A[i][k] * arr[k][0]);
     }
   }
-
-  return finalarr;
 }
 
