@@ -1,7 +1,7 @@
 #include "Arduino.h"
 #include "ssLocalizationLib.h"
 
-void ssLocalizationLib::generateMatrices(float ptrx[xsize], float ptry[ysize], float ptrcal[xsize][num_nodes], float xi, float yi, float A[xsize][NUMBER_OF_NODES], float B[xsize][1],float C[xsize][1])
+void ssLocalizationLib::generateMatrices(float ptrx[xsize], float ptry[ysize], float ptrcal[xsize][NUMBER_OF_NODES], float xi, float yi, float A[xsize][NUMBER_OF_NODES], float B[xsize][1],float C[xsize][1])
 {
   int m = xsize;
   int n = 2;
