@@ -1,12 +1,6 @@
 #include "Arduino.h"
 #include "ssLocalizationLib.h"
 
-/*Morse::Morse(int pin)
-{
-  pinMode(pin, OUTPUT);
-  _pin = pin;
-}*/
-
 void ssLocalizationLib::generateMatrices(float ptrx[xsize], float ptry[ysize], float ptrcal[xsize][num_nodes], float xi, float yi, float A[xsize][num_nodes], float B[xsize][1],float C[xsize][1])
 {
   int m = xsize;
@@ -39,15 +33,8 @@ void ssLocalizationLib::generateMatrices(float ptrx[xsize], float ptry[ysize], f
   };
 
   float finalarr[m][1];
-  
-  for (int i = 0; i < m; i++)
-  {
-    finalarr[i][0] = 0.0;
-    for (int k = 0; k < n; k++)
-    {
-      finalarr[i][0] = finalarr[i][0] + (A[i][k] * arr[k][0]);
-    }
-  }
+
+  finalarr = add(finalarr, (multiply(A, arr, m, n, returnarr)), m, returnarr);
   
   C = add(C, finalarr, m, addArray);
 }
@@ -62,7 +49,7 @@ float ssLocalizationLib::add(float arr1, float arr2, int m, float finalarr)
   return finalarr;
 }
 
-void ssLocalizationLib::subtract(float arr1, float arr2, int m, float finalarr)
+float ssLocalizationLib::subtract(float arr1, float arr2, int m, float finalarr)
 {
   for (int i = 0; i < m; i++)
   {
@@ -72,7 +59,17 @@ void ssLocalizationLib::subtract(float arr1, float arr2, int m, float finalarr)
   return finalarr;
 }
 
-void ssLocalizationLib::multiply()
+float ssLocalizationLib::multiply(float arr1, float arr2, int m, int n, float finalarr)
 {
+  for (int i = 0; i < m; i++)
+  {
+    finalarr[i][0] = 0.0;
+    for (int k = 0; k < n; k++)
+    {
+      finalarr[i][0] = finalarr[i][0] + (A[i][k] * arr[k][0]);
+    }
+  }
+
+  return finalarr;
 }
 
