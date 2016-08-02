@@ -3,6 +3,22 @@
 
 #include "Arduino.h"
 
+#define xsize 3
+#define ysize 3
+float xi = 2.0;
+float yi = 3.0;
+float A[xsize][2];
+float B[xsize][1];
+float C[xsize][1];
+
+float x[xsize] = {14, 5, 7};
+float y[ysize] = {9, 12, 11};
+float cal[xsize][NUMBER_OF_NODES - 1] = {
+    {1, 2},
+    {3, 4},
+    {5, 6}
+  };
+
 class ssLocalizationLib
 {
   public:

@@ -89,7 +89,7 @@ void setup()
        receiveSuccessful = receiveSetup();
     }
 
-    localizationLib.generateMatrices(x, y, cal, xi, yi, A, B, C);
+    //localizationLib.generateMatrices(x, y, cal, xi, yi, A, B, C);
 
     for (int i=0; i<NUMBER_OF_NODES-1; i++)
     {
@@ -495,7 +495,4 @@ int receiveAcknowledge()
     Serial.println("sendtoWait failed");
     return 0;
 }
-
-
-
 
