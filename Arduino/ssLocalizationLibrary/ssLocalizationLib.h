@@ -3,15 +3,10 @@
 
 #include "Arduino.h"
 
-class ssLocalizationLib
-{
-  public:
-    ssLocalizationLib();
-    void generateMatrices();
-    void add();
-    void subtract();
-    void multiply();
-  private:
-};
+public:
+  void generateMatrices();
+  float add();
+  float subtract();
+  float multiply();
 
 #endif
