@@ -30,7 +30,7 @@ ssLocalizationLib localizationLib;
 //This is the address of THIS node  
 #define CLIENT_ADDRESS NODE_4_ADDRESS
 
-//GENERATE MATRICES VALUES
+/**GENERATE MATRICES VALUES
 #define xsize 3
 #define ysize 3
 float xi = 2.0;
@@ -46,7 +46,7 @@ float cal[xsize][NUMBER_OF_NODES - 1] = {
     {1, 2},
     {3, 4},
     {5, 6}
-  };
+  };**/
 
 //Tells node whether it has received from all the other nodes
 uint8_t myTurnToBroadcast = 0;

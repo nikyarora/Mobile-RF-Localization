@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 
+#define NUMBER_OF_NODES 4
 #define xsize 3
 #define ysize 3
 float xi = 2.0;
