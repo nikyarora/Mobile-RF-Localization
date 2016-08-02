@@ -31,16 +31,16 @@ RH_RF22 driver;
 //GENERATE MATRICES VALUES
 #define xsize 3
 #define ysize 3
-double xi = 2.0;
-double yi = 3.0;
-double A[xsize][NUMBER_OF_NODES - 1];
-double B[xsize][1];
-double C[xsize][1];
+float xi = 2.0;
+float yi = 3.0;
+float A[xsize][2];
+float B[xsize][1];
+float C[xsize][1];
 
 //CALIBRATION STUFF
-char x[xsize] = {14, 5, 7};
-char y[ysize] = {9, 12, 11};
-double cal[xsize][NUMBER_OF_NODES - 1] = {
+float x[xsize] = {14, 5, 7};
+float y[ysize] = {9, 12, 11};
+float cal[xsize][NUMBER_OF_NODES - 1] = {
     {1, 2},
     {3, 4},
     {5, 6}
@@ -227,7 +227,7 @@ void loop()
       {
         if(myTurnToBroadcast)
         {
-          double rssiValues[xsize][1];
+          float rssiValues[xsize][1];
           for(int i = 0; i < NUMBER_OF_NODES - 1; i++)
           {
             rssiValues[i][0] = data[i];
@@ -501,7 +501,7 @@ int receiveAcknowledge()
  * This is the generate matrices function that has all the math equations to 
  * calculate the distances from the RSSI values.
  */
-void generateMatrices(char ptrx[xsize], char ptry[ysize], double ptrcal[xsize][NUMBER_OF_NODES - 1], double xi, double yi, double A[xsize][NUMBER_OF_NODES - 1], double B[xsize][1],double C[xsize][1])
+void generateMatrices(float ptrx[xsize], float ptry[ysize], float ptrcal[xsize][NUMBER_OF_NODES - 1], float xi, float yi, float A[xsize][NUMBER_OF_NODES - 1], float B[xsize][1],float C[xsize][1])
 {
   int m = xsize;
   int n = 2;
@@ -518,7 +518,7 @@ void generateMatrices(char ptrx[xsize], char ptry[ysize], double ptrcal[xsize][N
 
   for(int i = 0; i < m; i++)
   {
-    double linearM[] = {2*(xi-ptrx[i])/(pow(xi-ptrx[i],2)+pow(yi-ptry[i],2)), 2*(yi-ptry[i])/(pow(xi-ptrx[i],2)+pow(yi-ptry[i],2))};
+    float linearM[] = {2*(xi-ptrx[i])/(pow(xi-ptrx[i],2)+pow(yi-ptry[i],2)), 2*(yi-ptry[i])/(pow(xi-ptrx[i],2)+pow(yi-ptry[i],2))};
     for(int j = 0; j < n; j++)
     {
       A[i][j] = (-10.0 /ptrcal[i][0]) * linearM[j];
@@ -527,12 +527,12 @@ void generateMatrices(char ptrx[xsize], char ptry[ysize], double ptrcal[xsize][N
     B[i][0] = 1/ptrcal[i][0];
   }
 
- double arr[2][1] = {
+ float arr[2][1] = {
     {-xi},
     {-yi}
   };
 
-  double finalarr[m][1];
+  float finalarr[m][1];
   
   for (int i = 0; i < m; i++)
   {

@@ -9,18 +9,18 @@ void setup()
 {
   Serial.begin(9600);
   
-  char x[xsize] = {14, 5, 7};
-  char y[ysize] = {9, 12, 11};
-  double cal[xsize][num_nodes] = {
+  float x[xsize] = {14, 5, 7};
+  float y[ysize] = {9, 12, 11};
+  float cal[xsize][num_nodes] = {
     {1, 2},
     {3, 4},
     {5, 6}
   };
-  double xi = 2.0;
-  double yi = 3.0;
-  double A[xsize][num_nodes];
-  double B[xsize];
-  double C[xsize][1];
+  float xi = 2.0;
+  float yi = 3.0;
+  float A[xsize][num_nodes];
+  float B[xsize];
+  float C[xsize][1];
   generateMatrices(x, y, cal, xi, yi, A, B, C);
 
   Serial.println();
@@ -53,7 +53,7 @@ void loop()
 {
 }
 
-void generateMatrices(char ptrx[xsize], char ptry[ysize], double ptrcal[xsize][num_nodes], double xi, double yi, double A[xsize][num_nodes], double B[xsize],double C[xsize][1])
+void generateMatrices(float ptrx[xsize], float ptry[ysize], float ptrcal[xsize][num_nodes], float xi, float yi, float A[xsize][num_nodes], float B[xsize],float C[xsize][1])
 {
   int m = xsize;
   int n = 2;
@@ -70,7 +70,7 @@ void generateMatrices(char ptrx[xsize], char ptry[ysize], double ptrcal[xsize][n
 
   for(int i = 0; i < m; i++)
   {
-    double linearM[] = {2*(xi-ptrx[i])/(pow(xi-ptrx[i],2)+pow(yi-ptry[i],2)), 2*(yi-ptry[i])/(pow(xi-ptrx[i],2)+pow(yi-ptry[i],2))};
+    float linearM[] = {2*(xi-ptrx[i])/(pow(xi-ptrx[i],2)+pow(yi-ptry[i],2)), 2*(yi-ptry[i])/(pow(xi-ptrx[i],2)+pow(yi-ptry[i],2))};
     for(int j = 0; j < n; j++)
     {
       A[i][j] = (-10.0 /ptrcal[i][0]) * linearM[j];
@@ -79,12 +79,12 @@ void generateMatrices(char ptrx[xsize], char ptry[ysize], double ptrcal[xsize][n
     B[i] = 1/ptrcal[i][0];
   }
 
- double arr[2][1] = {
+ float arr[2][1] = {
     {-xi},
     {-yi}
   };
 
-  double finalarr[m][1];
+  float finalarr[m][1];
   
   for (int i = 0; i < m; i++)
   {
