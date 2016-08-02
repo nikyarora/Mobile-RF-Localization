@@ -20,6 +20,8 @@ float cal[xsize][NUMBER_OF_NODES - 1] = {
     {5, 6}
   };
 
+ int m = xsize;
+
 class ssLocalizationLib
 {
   public:
