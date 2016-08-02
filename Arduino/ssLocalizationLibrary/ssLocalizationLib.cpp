@@ -51,7 +51,7 @@ void ssLocalizationLib::add(float arr1[m][1], float arr2[m][1], int m, float fin
   }  
 }
 
-void ssLocalizationLib::subtract(float arr[m][1], float arr2[m][1], int m, float finalarr[m][1])
+void ssLocalizationLib::subtract(float arr1[m][1], float arr2[m][1], int m, float finalarr[m][1])
 {
   for (int i = 0; i < m; i++)
   {

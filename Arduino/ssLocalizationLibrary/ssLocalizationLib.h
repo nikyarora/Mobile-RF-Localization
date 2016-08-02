@@ -4,7 +4,7 @@
 #include "Arduino.h"
 
 #define NUMBER_OF_NODES 4
-#define xsize 3
+#define xsize NUMBER_OF_NODES - 1
 #define ysize 3
 float xi = 2.0;
 float yi = 3.0;
@@ -20,17 +20,16 @@ float cal[xsize][NUMBER_OF_NODES - 1] = {
     {5, 6}
   };
 
- int m = xsize;
+ int m = NUMBER_OF_NODES - 1;
+ int n = 2;
 
 class ssLocalizationLib
 {
   public:
-    //ssLocalizationLib();
     void generateMatrices(float ptrx[xsize], float ptry[ysize], float ptrcal[xsize][NUMBER_OF_NODES], float xi, float yi, float A[xsize][NUMBER_OF_NODES], float B[xsize][1],float C[xsize][1]);
-    void add(float arr1[m][1], float arr2[m][1], int m, float finalarr[m][1]);
-    void subtract(float arr[m][1], float arr2[m][1], int m, float finalarr[m][1]);
-    void multiply(float arr1[m][n], float arr2[n][1], int m, int n, float finalarr[m][1]);
-  //private:
+    void add(float arr1[][1], float arr2[][1], int m, float finalarr[][1]);
+    void subtract(float arr1[][1], float arr2[][1], int m, float finalarr[][1]);
+    void multiply(float arr1[][n], float arr2[][1], int m, int n, float finalarr[][1]);
 };
 
 #endif
