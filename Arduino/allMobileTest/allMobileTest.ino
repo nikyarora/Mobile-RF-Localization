@@ -4,6 +4,7 @@
 #include <Time.h>
 #include <MatrixMath.h>
 #include <math.h>
+#include <ssLocalizationLib.h>
 
 // Mobile_Node_Code.pde
 // -*- mode: C++ -*-
@@ -24,6 +25,7 @@
 #define NODE_8_ADDRESS 0x08
 #define NUMBER_OF_NODES 4
 RH_RF22 driver;
+ssLocalizationLib localizationLib;
 
 //This is the address of THIS node  
 #define CLIENT_ADDRESS NODE_4_ADDRESS
@@ -87,7 +89,7 @@ void setup()
        receiveSuccessful = receiveSetup();
     }
 
-    generateMatrices(x, y, cal, xi, yi, A, B, C);
+    localizationLib.generateMatrices(x, y, cal, xi, yi, A, B, C);
 
     for (int i=0; i<NUMBER_OF_NODES-1; i++)
     {
@@ -493,63 +495,6 @@ int receiveAcknowledge()
     Serial.println("sendtoWait failed");
     return 0;
 }
-
-
-/*****************************************************************CALIBRATION and GENERATE MATRICES********************************************************************/
-
-/**
- * This is the generate matrices function that has all the math equations to 
- * calculate the distances from the RSSI values.
- */
-void generateMatrices(float ptrx[xsize], float ptry[ysize], float ptrcal[xsize][NUMBER_OF_NODES - 1], float xi, float yi, float A[xsize][NUMBER_OF_NODES - 1], float B[xsize][1],float C[xsize][1])
-{
-  int m = xsize;
-  int n = 2;
-  for(int i = 0; i < m; i++)
-  {
-    for(int j = 0; j < n; j++)
-    {
-      A[i][j] = 0.0;
-    }
-
-    B[i][0] = 0.0;
-    C[i][0] = 0.0;
-  }
-
-  for(int i = 0; i < m; i++)
-  {
-    float linearM[] = {2*(xi-ptrx[i])/(pow(xi-ptrx[i],2)+pow(yi-ptry[i],2)), 2*(yi-ptry[i])/(pow(xi-ptrx[i],2)+pow(yi-ptry[i],2))};
-    for(int j = 0; j < n; j++)
-    {
-      A[i][j] = (-10.0 /ptrcal[i][0]) * linearM[j];
-    }
-    C[i][0] = (-ptrcal[i][1]-25.2-20 * log10(sqrt(pow(xi-ptrx[i],2) + pow(yi-ptry[i],2))) / ptrcal[i][0]);
-    B[i][0] = 1/ptrcal[i][0];
-  }
-
- float arr[2][1] = {
-    {-xi},
-    {-yi}
-  };
-
-  float finalarr[m][1];
-  
-  for (int i = 0; i < m; i++)
-  {
-    finalarr[i][0] = 0.0;
-    for (int k = 0; k < n; k++)
-    {
-      finalarr[i][0] = finalarr[i][0] + (A[i][k] * arr[k][0]);
-      Serial.println(finalarr[i][0]);
-    }
-  }
-  
-  for (int i = 0; i < m; i++)
-  {
-    C[i][0] = C[i][0] + finalarr[i][0];
-  }
-}
-
 
 
 
