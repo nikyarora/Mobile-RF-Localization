@@ -66,7 +66,7 @@ void ssLocalizationLib::multiply(float arr1[][2], float arr2[][1], int m, int n,
     finalarr[i][0] = 0.0;
     for (int k = 0; k < n; k++)
     {
-      finalarr[i][0] = finalarr[i][0] + (A[i][k] * arr[k][0]);
+      finalarr[i][0] = finalarr[i][0] + (arr1[i][k] * arr2[k][0]);
     }
   }
 }
