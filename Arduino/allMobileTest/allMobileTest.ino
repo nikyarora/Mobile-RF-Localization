@@ -25,12 +25,11 @@
 #define NODE_8_ADDRESS 0x08
 #define NUMBER_OF_NODES 4
 RH_RF22 driver;
-ssLocalizationLib localizationLib;
 
 //This is the address of THIS node  
 #define CLIENT_ADDRESS NODE_4_ADDRESS
 
-/**GENERATE MATRICES VALUES
+//GENERATE MATRICES VALUES
 #define xsize 3
 #define ysize 3
 float xi = 2.0;
@@ -46,7 +45,7 @@ float cal[xsize][NUMBER_OF_NODES - 1] = {
     {1, 2},
     {3, 4},
     {5, 6}
-  };**/
+  };
 
 //Tells node whether it has received from all the other nodes
 uint8_t myTurnToBroadcast = 0;
@@ -89,7 +88,7 @@ void setup()
        receiveSuccessful = receiveSetup();
     }
 
-    //localizationLib.generateMatrices(x, y, cal, xi, yi, A, B, C);
+    generateMatrices(x, y, cal, xi, yi, A, B, C);
 
     for (int i=0; i<NUMBER_OF_NODES-1; i++)
     {
