@@ -242,19 +242,19 @@ void loop()
             rssiValues[i][0] = rssiValues[i][0] - B[i][0] - C[i][0];
           }
 
-          float multiplyA[2][3];
-          float newArray[2][2];
+          float multiplyA[2][NUMBER_OF_NODES - 1];
+          float XmAndYm[2][1];
           inverse(A, multiplyA);
 
           //multiply the inverse of A by rssiValues
-          for(int i = 0; i < 2; i++)
+          for(int i = 0; i < n; i++)
           {
             for(int j = 0; j < 1; j++)
             {
-              newArray[i][j]=0;
-              for(int k = 0; k < 3; k++)
+              XmAndYm[i][j]=0;
+              for(int k = 0; k < m; k++)
               {
-                newArray[i][j]= newArray[i][j] + (multiplyA[i][k] * rssiValues[k][j]);
+                XmAndYm[i][j]= XmAndYm[i][j] + (multiplyA[i][k] * rssiValues[k][j]);
               }
             }
           }
@@ -524,6 +524,9 @@ int receiveAcknowledge()
 
 /*****************************************************GENERATE MATRICES and OTHER MATRIX FUNCTIONS*********************************************************/
 
+/**************************************************
+ * This function ...
+ *************************************************/
 void generateMatrices(float ptrx[xsize], float ptry[ysize], float ptrcal[xsize][NUMBER_OF_NODES - 1], float xi, float yi, float A[xsize][2], float B[xsize][1],float C[xsize][1])
 {
   int m = xsize;
@@ -571,34 +574,44 @@ void generateMatrices(float ptrx[xsize], float ptry[ysize], float ptrcal[xsize][
   {
     C[i][0] = C[i][0] + finalarr[i][0];
   }
+  
 }
 
 /**************************************
  * Calculate the pseudoinverse of A
  *************************************/
-void inverse(float A[][2], float multiplyA[2][3])
+void inverse(float A[][2], float multiplyA[2][NUMBER_OF_NODES - 1])
 {
   //TRANSPOSE A
-  float newA[n][m];
+  float transposedA[n][m];
   for(int i = 0; i < m; i++)
   {
     for(int j = 0; j < n; j++)
     {
-      newA[j][i] = A[i][j];
+      transposedA[j][i] = A[i][j];
+      Serial.println(transposedA[j][i]);
     }
   }
 
-  //MULTIPLY A BY A TRANSPOSE
+  //MULTIPLY A TRANSPOSE BY A
   float AByATranspose[2][2];
-  for (int i = 0;i < m; i++)
+  for (int i = 0; i < n; i++)//2 rows in A transpose
   {
-    for(int j = 0; j < m; j++)
+    for(int j = 0; j < n; j++)//3 columns in A transpose and 3 rows in A 
     {
       AByATranspose[i][j]=0;
-      for(int k = 0; k < n ; k++)
+      for(int k = 0; k < m; k++)//2 columns in A
       {
-        AByATranspose[i][j]= AByATranspose[i][j] + (A[i][k]*newA[k][j]);
+        AByATranspose[i][j]= AByATranspose[i][j] + (transposedA[i][k]*A[k][j]);
       }
+    }
+  }
+
+  for(int i = 0; i < 2; i++)
+  {
+    for(int j = 0; j < 2; j++)
+    {
+      Serial.println(AByATranspose[i][j], 6);
     }
   }
 
@@ -680,16 +693,16 @@ void inverse(float A[][2], float multiplyA[2][3])
 
   //MUTLIPLY A TRANSPOSE BY A INVERSE
   //A[3][2] --> multiplyA[2][3]
-  //newA[2][3]
+  //transposedA[2][3]
   //AByATranspose[2][2]
-  for (int i = 0; i < 2; i++)
+  for (int i = 0; i < n; i++)//rows in AByATranspose
   {
-    for(int j = 0; j < 3; j++)
+    for(int j = 0; j < m; j++)//rows in transposedA and columns in AByATranspose
     {
       multiplyA[i][j]=0;
-      for(int k = 0; k < 2; k++)
+      for(int k = 0; k < n; k++)//columns in transposedA
       {
-        multiplyA[i][j]= multiplyA[i][j] + (AByATranspose[i][k] * newA[n][j]);  
+        multiplyA[i][j]= multiplyA[i][j] + (AByATranspose[i][k] * transposedA[k][j]);  
       }
     }
   }
