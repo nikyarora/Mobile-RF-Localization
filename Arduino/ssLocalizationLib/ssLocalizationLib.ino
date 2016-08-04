@@ -68,34 +68,7 @@ void setup()
       }
     }
   }  
-
-  Serial.println();
-  int n = 2;
-  Serial.println("A");
-  for (int i = 0; i < xsize; i++)
-  {
-    for (int j = 0; j < n; j++)
-    {
-      Serial.println(A[i][j], 6);
-    }
-  }
-
-  Serial.println();
-  Serial.println("B");
-  for (int i = 0; i < xsize; i++)
-  {
-    Serial.println(B[i][0]);
-  }
-
-  Serial.println();
-  Serial.println("C");
-  for (int i = 0; i < xsize; i++)
-  {
-    Serial.println(C[i][0]);
-  }
-
-  Serial.println();
-  Serial.println("Xm and Ym");
+  
   for(int i = 0; i < 2; i++)
   {
     Serial.println(XmAndYm[i][0]);
@@ -163,7 +136,6 @@ void inverse(float A[][2], float multiplyA[2][NUMBER_OF_NODES - 1])
     for(int j = 0; j < n; j++)
     {
       transposedA[j][i] = A[i][j];
-      Serial.println(transposedA[j][i]);
     }
   }
 
@@ -178,14 +150,6 @@ void inverse(float A[][2], float multiplyA[2][NUMBER_OF_NODES - 1])
       {
         AByATranspose[i][j]= AByATranspose[i][j] + (transposedA[i][k]*A[k][j]);
       }
-    }
-  }
-
-  for(int i = 0; i < 2; i++)
-  {
-    for(int j = 0; j < 2; j++)
-    {
-      Serial.println(AByATranspose[i][j], 6);
     }
   }
 
