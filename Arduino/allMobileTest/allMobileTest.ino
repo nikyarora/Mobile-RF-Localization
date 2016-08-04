@@ -145,9 +145,7 @@ void loop()
 
         switch (from) {
         case NODE_1_ADDRESS:
-        Serial.println("Received RSSI From M1");  
         data[0] = driver.lastRssi();
-        Serial.println(data[0]);
         rssiReceiptFlags [0] = 1;
         if(CLIENT_ADDRESS == NODE_2_ADDRESS)
         {
@@ -155,10 +153,8 @@ void loop()
         }
         break;
         
-        case NODE_2_ADDRESS:
-        Serial.println("Received RSSI From M2");  
+        case NODE_2_ADDRESS: 
         data[1] = driver.lastRssi();
-        Serial.println(data[1]);
         rssiReceiptFlags [1] = 1;
         if(CLIENT_ADDRESS == NODE_3_ADDRESS)
         {
@@ -167,9 +163,7 @@ void loop()
         break;
       
         case NODE_3_ADDRESS:
-        Serial.println("Received RSSI From M3");  
         data[2] = driver.lastRssi();
-        Serial.println(data[2]);
         rssiReceiptFlags [2] = 1;
         if(CLIENT_ADDRESS == NODE_4_ADDRESS)
         {
@@ -177,10 +171,8 @@ void loop()
         }
         break;
         
-        case NODE_4_ADDRESS:
-        Serial.println("Received RSSI From M4");  
+        case NODE_4_ADDRESS:  
         data[3] = driver.lastRssi();
-        Serial.println(data[3]);
         rssiReceiptFlags [2] = 1;
         if(CLIENT_ADDRESS == NODE_1_ADDRESS)
         {
@@ -230,10 +222,12 @@ void loop()
       {
         if(myTurnToBroadcast)
         {
+          generateMatrices(x, y, cal, xi, yi, A, B, C);
           float rssiValues[xsize][1];
           for(int i = 0; i < NUMBER_OF_NODES - 1; i++)
           {
             rssiValues[i][0] = data[i];
+            Serial.write(data, NUMBER_OF_NODES);
           }
 
           //subtract B and C from the RSSI values
@@ -269,8 +263,6 @@ void loop()
           data[i] = 0;
           rssiReceiptFlags[i] = 0;
         } 
-        Serial.print("MY TURN: ");
-        Serial.println(myTurnToBroadcast);
         if(myTurnToBroadcast == 1)
         {
           broadcast();
@@ -296,17 +288,19 @@ void broadcast()
   //BROADCAST
   delay(3000);
   myTurnToBroadcast = 0;
-  Serial.println();
-  Serial.println("Broadcasting ID to all receiving nodes.");
+  //Serial.println();
+  //Serial.println("Broadcasting ID to all receiving nodes.");
   //Broadcast the message to all other reachable nodes.    
   if (manager.sendtoWait(data, sizeof(data), RH_BROADCAST_ADDRESS))
   {
-    Serial.println("Broadcast Successful");
-    Serial.print("My Address: ");
-    Serial.println(CLIENT_ADDRESS);
+    //Serial.println("Broadcast Successful");
+    //Serial.print("My Address: ");
+    //Serial.println(CLIENT_ADDRESS);
   }
   else
-   Serial.println("sendtoWait failed"); 
+  {
+   //Serial.println("sendtoWait failed");  
+  }
 }
 
 
@@ -332,54 +326,49 @@ int receiveSetup()
         switch (from) 
         {
           case NODE_2_ADDRESS:
-          Serial.println("Received From M2");
+          //Serial.println("Received From M2");
           rssiReceiptFlags [0] = 1;
           while(sendtoWait == 0)
           {
             if(manager.sendtoWait(data, sizeof(data), NODE_2_ADDRESS))
             {
-              Serial.println("2 success");
               sendtoWait = 1;
             }
             else
             {
-              Serial.println("2 keep going");
               sendtoWait = 0;
             }
           }
           break;
           
           case NODE_3_ADDRESS:
-          Serial.println("Received From M3");  
+         // Serial.println("Received From M3");  
           rssiReceiptFlags [1] = 1;
           while(sendtoWait == 0)
           {
             if(manager.sendtoWait(data, sizeof(data), NODE_3_ADDRESS))
             {
-              Serial.println("3 success");
               sendtoWait = 1;
             }
             else
             {
-              Serial.println("3 keep going");
               sendtoWait = 0;
             }
           }
           break;
           
           case NODE_4_ADDRESS:
-          Serial.println("Received From M4");
+          //Serial.println("Received From M4");
           rssiReceiptFlags [2] = 1;
           while(sendtoWait == 0)
           {
             if(manager.sendtoWait(data, sizeof(data), NODE_4_ADDRESS))
             {
-              Serial.println("4 success");
               sendtoWait = 1;
             }
             else
             {
-              Serial.println("4 keep going");
+
               sendtoWait = 0;
             }
           }
@@ -492,12 +481,11 @@ int receiveAcknowledge()
   if (manager.sendtoWait(data, sizeof(data), NODE_1_ADDRESS))
   {
     delay(1000);
-    Serial.println("Broadcast Successful");
+    //Serial.println("Broadcast Successful");
     while(waitToReceive == 0) 
     {
      if (manager.available())
      {
-        Serial.println("manager is available");
         // Wait for a message addressed to us from the client
         uint8_t len = sizeof(buf);
         uint8_t from;
@@ -505,20 +493,20 @@ int receiveAcknowledge()
         int8_t rssi;
         if (manager.recvfromAck(buf, &len, &from, &to))
         {
-          Serial.println("RECEIVED AN ACKNOWLEDGEMENT");
+          //Serial.println("RECEIVED AN ACKNOWLEDGEMENT");
           waitToReceive = 1;
           return 1;
         }
         else
         {
-          Serial.println("DID NOT RECEIVE AN ACKNOWLEGEMENT");
+         // Serial.println("DID NOT RECEIVE AN ACKNOWLEGEMENT");
           waitToReceive = 0;
         }
      }
     }
   }
   else
-    Serial.println("sendtoWait failed");
+   // Serial.println("sendtoWait failed");
     return 0;
 }
 
@@ -566,7 +554,6 @@ void generateMatrices(float ptrx[xsize], float ptry[ysize], float ptrcal[xsize][
     for (int k = 0; k < n; k++)
     {
       finalarr[i][0] = finalarr[i][0] + (A[i][k] * arr[k][0]);
-      Serial.println(finalarr[i][0]);
     }
   }
   
@@ -589,7 +576,6 @@ void inverse(float A[][2], float multiplyA[2][NUMBER_OF_NODES - 1])
     for(int j = 0; j < n; j++)
     {
       transposedA[j][i] = A[i][j];
-      Serial.println(transposedA[j][i]);
     }
   }
 
@@ -604,14 +590,6 @@ void inverse(float A[][2], float multiplyA[2][NUMBER_OF_NODES - 1])
       {
         AByATranspose[i][j]= AByATranspose[i][j] + (transposedA[i][k]*A[k][j]);
       }
-    }
-  }
-
-  for(int i = 0; i < 2; i++)
-  {
-    for(int j = 0; j < 2; j++)
-    {
-      Serial.println(AByATranspose[i][j], 6);
     }
   }
 

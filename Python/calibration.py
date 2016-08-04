@@ -10,8 +10,8 @@ from scipy import stats
 import csv
 import ssLocalizationLib
 
-#port = '/dev/tty.usbmodemfd121'
-port = 2
+port = '/dev/cu.usbmodem1411'
+#port = 2
 
 #Initialize variables
 x,y,numAnchor = ssLocalizationLib.textReader('Pos.txt') #import anchor positions
