@@ -26,7 +26,7 @@
 RH_RF22 driver;
 
 //This is the address of THIS node  
-#define CLIENT_ADDRESS NODE_1_ADDRESS
+#define CLIENT_ADDRESS NODE_4_ADDRESS
 
 //GENERATE MATRICES VALUES
 #define xsize 3
@@ -140,11 +140,12 @@ void loop()
     {
       if (to == RH_BROADCAST_ADDRESS)
       {
-
+        data[0] = buf[0];
+        
         switch (from) {
         case NODE_1_ADDRESS:
         //Serial.println("Received RSSI From M1");
-        data[0] = driver.lastRssi();
+        data[1] = driver.lastRssi();
         rssiReceiptFlags [0] = 1;
         if(CLIENT_ADDRESS == NODE_2_ADDRESS)
         {
@@ -154,8 +155,8 @@ void loop()
         
         case NODE_2_ADDRESS: 
         //Serial.println("Received RSSI From M2");
-        data[0] = driver.lastRssi();
-        rssiReceiptFlags [0] = 1;
+        data[2] = driver.lastRssi();
+        rssiReceiptFlags [1] = 1;
         if(CLIENT_ADDRESS == NODE_3_ADDRESS)
         {
           myTurnToBroadcast = 1;
@@ -164,8 +165,8 @@ void loop()
       
         case NODE_3_ADDRESS:
         //Serial.println("Received RSSI From M3");
-        data[1] = driver.lastRssi();
-        rssiReceiptFlags [1] = 1;
+        data[3] = driver.lastRssi();
+        rssiReceiptFlags [2] = 1;
         if(CLIENT_ADDRESS == NODE_4_ADDRESS)
         {
           myTurnToBroadcast = 1;
@@ -174,7 +175,7 @@ void loop()
         
         case NODE_4_ADDRESS:  
         //Serial.println("Received RSSI From M4");
-        data[2] = driver.lastRssi();
+        data[3] = driver.lastRssi();
         rssiReceiptFlags [2] = 1;
         if(CLIENT_ADDRESS == NODE_1_ADDRESS)
         {
@@ -259,11 +260,10 @@ void loop()
       //Checks to see if all the data is received. If so, sends out a broadcast signal
       if(allDataReceived)
       {   
-        for (int i=0; i<NUMBER_OF_NODES-1; i++)
+        for (int i=0; i<NUMBER_OF_NODES; i++)
         {
           Serial.write(data, NUMBER_OF_NODES);
-          Serial.println(data[i]);
-          data[i] = 0;
+          //data[i] = 0;
           rssiReceiptFlags[i] = 0;
         } 
         if(myTurnToBroadcast == 1)

@@ -17,7 +17,7 @@
 #define NODE_6_ADDRESS 0xA5  // 
 #define NODE_7_ADDRESS 0xA6  // 
 #define NODE_8_ADDRESS 0xA7  // 
-#define NUMBER_OF_NODES 4
+#define NUMBER_OF_NODES 3
 
 // Singleton instance of the radio driver
 RH_RF22 driver;

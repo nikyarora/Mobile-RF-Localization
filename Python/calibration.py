@@ -10,7 +10,7 @@ from scipy import stats
 import csv
 import ssLocalizationLib
 
-port = '/dev/cu.usbmodem1411'
+port = '/dev/cu.usbmodem1421'
 #port = 2
 
 #Initialize variables
@@ -53,8 +53,8 @@ while(exitBool&ser.isOpen()):
             time.sleep(.05)
             print(len(C))
             if(len(C)>0):
-             print(len(C))
-             C = C + ser.readline()
+                print(len(C))
+                C = C + ser.readline()
                 
                 #collect RSSI and place into matrix
                 tempRSSI = numpy.zeros((1,numAnchor),int)
