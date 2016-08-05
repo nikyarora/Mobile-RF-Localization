@@ -51,10 +51,10 @@ while(exitBool&ser.isOpen()):
             time.sleep(.05)
             C= ser.read(1)#.decode()
             time.sleep(.05)
-            #print(len(C))
+            print(len(C))
             if(len(C)>0):
-            # print(len(C))
-                C = C + ser.readline()
+             print(len(C))
+             C = C + ser.readline()
                 
                 #collect RSSI and place into matrix
                 tempRSSI = numpy.zeros((1,numAnchor),int)
