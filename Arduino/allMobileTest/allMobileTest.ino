@@ -26,7 +26,7 @@
 RH_RF22 driver;
 
 //This is the address of THIS node  
-#define CLIENT_ADDRESS NODE_4_ADDRESS
+#define CLIENT_ADDRESS NODE_1_ADDRESS
 
 //GENERATE MATRICES VALUES
 #define xsize 3
@@ -140,8 +140,6 @@ void loop()
     {
       if (to == RH_BROADCAST_ADDRESS)
       {
-        Serial.println();
-        Serial.println("Received Mobile Beam(s)");  
 
         switch (from) {
         case NODE_1_ADDRESS:
@@ -154,8 +152,8 @@ void loop()
         break;
         
         case NODE_2_ADDRESS: 
-        data[1] = driver.lastRssi();
-        rssiReceiptFlags [1] = 1;
+        data[0] = driver.lastRssi();
+        rssiReceiptFlags [0] = 1;
         if(CLIENT_ADDRESS == NODE_3_ADDRESS)
         {
           myTurnToBroadcast = 1;
@@ -163,8 +161,8 @@ void loop()
         break;
       
         case NODE_3_ADDRESS:
-        data[2] = driver.lastRssi();
-        rssiReceiptFlags [2] = 1;
+        data[1] = driver.lastRssi();
+        rssiReceiptFlags [1] = 1;
         if(CLIENT_ADDRESS == NODE_4_ADDRESS)
         {
           myTurnToBroadcast = 1;
@@ -172,7 +170,7 @@ void loop()
         break;
         
         case NODE_4_ADDRESS:  
-        data[3] = driver.lastRssi();
+        data[2] = driver.lastRssi();
         rssiReceiptFlags [2] = 1;
         if(CLIENT_ADDRESS == NODE_1_ADDRESS)
         {
@@ -228,6 +226,7 @@ void loop()
           {
             rssiValues[i][0] = data[i];
             Serial.write(data, NUMBER_OF_NODES);
+            Serial.println(data[i]);
           }
 
           //subtract B and C from the RSSI values
