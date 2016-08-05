@@ -47,7 +47,7 @@ while(exitBool&ser.isOpen()):
         
         #gather data for 10 seconds
         stime = time.time()
-        while((time.time()-stime)<10):
+        while((time.time()-stime)<60):
             time.sleep(.05)
             C= ser.read(1)#.decode()
             time.sleep(.05)

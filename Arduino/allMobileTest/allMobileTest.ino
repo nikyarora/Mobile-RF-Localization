@@ -143,6 +143,7 @@ void loop()
 
         switch (from) {
         case NODE_1_ADDRESS:
+        //Serial.println("Received RSSI From M1");
         data[0] = driver.lastRssi();
         rssiReceiptFlags [0] = 1;
         if(CLIENT_ADDRESS == NODE_2_ADDRESS)
@@ -152,6 +153,7 @@ void loop()
         break;
         
         case NODE_2_ADDRESS: 
+        //Serial.println("Received RSSI From M2");
         data[0] = driver.lastRssi();
         rssiReceiptFlags [0] = 1;
         if(CLIENT_ADDRESS == NODE_3_ADDRESS)
@@ -161,6 +163,7 @@ void loop()
         break;
       
         case NODE_3_ADDRESS:
+        //Serial.println("Received RSSI From M3");
         data[1] = driver.lastRssi();
         rssiReceiptFlags [1] = 1;
         if(CLIENT_ADDRESS == NODE_4_ADDRESS)
@@ -170,6 +173,7 @@ void loop()
         break;
         
         case NODE_4_ADDRESS:  
+        //Serial.println("Received RSSI From M4");
         data[2] = driver.lastRssi();
         rssiReceiptFlags [2] = 1;
         if(CLIENT_ADDRESS == NODE_1_ADDRESS)
@@ -225,8 +229,6 @@ void loop()
           for(int i = 0; i < NUMBER_OF_NODES - 1; i++)
           {
             rssiValues[i][0] = data[i];
-            Serial.write(data, NUMBER_OF_NODES);
-            Serial.println(data[i]);
           }
 
           //subtract B and C from the RSSI values
@@ -259,6 +261,8 @@ void loop()
       {   
         for (int i=0; i<NUMBER_OF_NODES-1; i++)
         {
+          Serial.write(data, NUMBER_OF_NODES);
+          Serial.println(data[i]);
           data[i] = 0;
           rssiReceiptFlags[i] = 0;
         } 
@@ -285,7 +289,7 @@ void loop()
 void broadcast()
 {
   //BROADCAST
-  delay(3000);
+  delay(2500);
   myTurnToBroadcast = 0;
   //Serial.println();
   //Serial.println("Broadcasting ID to all receiving nodes.");
@@ -331,26 +335,30 @@ int receiveSetup()
           {
             if(manager.sendtoWait(data, sizeof(data), NODE_2_ADDRESS))
             {
+              //Serial.println("2 success");
               sendtoWait = 1;
             }
             else
             {
+              //Serial.println("2 not success");
               sendtoWait = 0;
             }
           }
           break;
           
           case NODE_3_ADDRESS:
-         // Serial.println("Received From M3");  
+          //Serial.println("Received From M3");  
           rssiReceiptFlags [1] = 1;
           while(sendtoWait == 0)
           {
             if(manager.sendtoWait(data, sizeof(data), NODE_3_ADDRESS))
             {
+              //Serial.println("3 success");
               sendtoWait = 1;
             }
             else
             {
+              //Serial.println("3 not success");
               sendtoWait = 0;
             }
           }
@@ -363,11 +371,12 @@ int receiveSetup()
           {
             if(manager.sendtoWait(data, sizeof(data), NODE_4_ADDRESS))
             {
+              //Serial.println("4 success");
               sendtoWait = 1;
             }
             else
             {
-
+              //Serial.println("4 not success");
               sendtoWait = 0;
             }
           }
@@ -472,7 +481,7 @@ int receiveSetup()
 int receiveAcknowledge()
 {
   //BROADCAST
-  Serial.println();
+  //Serial.println();
   Serial.println("Broadcasting ID to NODE 1.");
   uint8_t waitToReceive = 0;
 
