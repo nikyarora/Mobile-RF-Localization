@@ -259,12 +259,15 @@ void loop()
       //Checks to see if all the data is received. If so, sends out a broadcast signal
       if(allDataReceived)
       {   
-        for (int i=0; i < NUMBER_OF_NODES - 1; i++)
+        String stringData;
+        for (int i=0; i < NUMBER_OF_NODES; i++)
         {
-          Serial.write(data, NUMBER_OF_NODES);
-          //data[i] = 0;
+          int dataValue = data[i];
+          stringData = stringData + data[i] + ",";
           rssiReceiptFlags[i] = 0;
         } 
+        stringData = stringData + '\n';
+        Serial.println(stringData);
         if(myTurnToBroadcast == 1)
         {
           broadcast();

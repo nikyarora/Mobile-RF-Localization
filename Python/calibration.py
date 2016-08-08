@@ -45,7 +45,7 @@ while(exitBool&ser.isOpen()):
             d[0][i] = numpy.sqrt(pow(x[i]-xm,2)+pow(y[i]-ym,2))
             rdb[0][i] = B_dB-20*math.log(numpy.sqrt(pow(x[i]-xm,2)+pow(y[i]-ym,2)),10)-25.2
         
-        #gather data for 10 seconds
+        #gather data for 60 seconds
         stime = time.time()
         while((time.time()-stime)<10):
             C = ser.readline()
