@@ -45,12 +45,12 @@ while(exitBool&ser.isOpen()):
             d[0][i] = numpy.sqrt(pow(x[i]-xm,2)+pow(y[i]-ym,2))
             rdb[0][i] = B_dB-20*math.log(numpy.sqrt(pow(x[i]-xm,2)+pow(y[i]-ym,2)),10)-25.2
         
-        #gather data for 60 seconds
+        #gather data for 10 seconds
         stime = time.time()
         while((time.time()-stime)<10):
             C = ser.readline()
 
-            if len(str) > 0:
+            if len(C) > 0:
                 tempString = C.split(',')
                 #collect RSSI and place into matrix
                 tempRSSI = numpy.zeros((1,numAnchor),int)
