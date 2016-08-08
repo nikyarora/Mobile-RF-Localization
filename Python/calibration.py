@@ -50,19 +50,20 @@ while(exitBool&ser.isOpen()):
         while((time.time()-stime)<10):
             C = ser.readline()
 
-            tempString = C.split(',')
-            #collect RSSI and place into matrix
-            tempRSSI = numpy.zeros((1,numAnchor),int)
-            for j in range (0, numAnchor):
-                if tempString[j] == 0:
-                    tempRSSI[0][j]=255
-                else:
-                    tempRSSI[0][j]= int(tempString[j])
+            if len(str) > 0:
+                tempString = C.split(',')
+                #collect RSSI and place into matrix
+                tempRSSI = numpy.zeros((1,numAnchor),int)
+                for j in range (0, numAnchor):
+                    if tempString[j] == 0:
+                        tempRSSI[0][j]=255
+                    else:
+                        tempRSSI[0][j]= int(tempString[j])
 
-            dis = numpy.append(dis,d,axis = 0)
-            R_dB = numpy.append(R_dB,rdb,axis = 0)
-            RSSI = numpy.append(RSSI,tempRSSI,axis = 0)
-            posM = numpy.append(posM,pos,axis = 0)
+                dis = numpy.append(dis,d,axis = 0)
+                R_dB = numpy.append(R_dB,rdb,axis = 0)
+                RSSI = numpy.append(RSSI,tempRSSI,axis = 0)
+                posM = numpy.append(posM,pos,axis = 0)
 
 ser.close()
 
