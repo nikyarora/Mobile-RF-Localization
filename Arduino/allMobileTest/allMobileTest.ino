@@ -22,11 +22,11 @@
 #define NODE_6_ADDRESS 0x06
 #define NODE_7_ADDRESS 0x07
 #define NODE_8_ADDRESS 0x08
-#define NUMBER_OF_NODES 4
+#define NUMBER_OF_NODES 3
 RH_RF22 driver;
 
 //This is the address of THIS node  
-#define CLIENT_ADDRESS NODE_4_ADDRESS
+#define CLIENT_ADDRESS NODE_1_ADDRESS
 
 //GENERATE MATRICES VALUES
 #define xsize 3
@@ -44,9 +44,9 @@ int n = 2;
 float x[xsize] = {14, 5, 7};
 float y[ysize] = {9, 12, 11};
 float cal[xsize][NUMBER_OF_NODES - 1] = {
-    {1, 2, 4},
-    {3, 4, 2},
-    {5, 6, 9}
+    {1, 2},
+    {3, 4},
+    {5, 6}
   };
 
 //Tells node whether it has received from all the other nodes
@@ -135,7 +135,6 @@ void loop()
     uint8_t from;
     uint8_t to;
     int8_t rssi;
-    uint8_t sendtoWait = 0;
     if (manager.recvfromAck(buf, &len, &from, &to))
     {
       if (to == RH_BROADCAST_ADDRESS)
@@ -155,8 +154,8 @@ void loop()
         
         case NODE_2_ADDRESS: 
         //Serial.println("Received RSSI From M2");
-        data[2] = driver.lastRssi();
-        rssiReceiptFlags [1] = 1;
+        data[1] = driver.lastRssi();
+        rssiReceiptFlags [0] = 1;
         if(CLIENT_ADDRESS == NODE_3_ADDRESS)
         {
           myTurnToBroadcast = 1;
@@ -165,9 +164,9 @@ void loop()
       
         case NODE_3_ADDRESS:
         //Serial.println("Received RSSI From M3");
-        data[3] = driver.lastRssi();
-        rssiReceiptFlags [2] = 1;
-        if(CLIENT_ADDRESS == NODE_4_ADDRESS)
+        data[2] = driver.lastRssi();
+        rssiReceiptFlags [1] = 1;
+        if(CLIENT_ADDRESS == NODE_1_ADDRESS)
         {
           myTurnToBroadcast = 1;
         }
@@ -260,7 +259,7 @@ void loop()
       //Checks to see if all the data is received. If so, sends out a broadcast signal
       if(allDataReceived)
       {   
-        for (int i=0; i<NUMBER_OF_NODES; i++)
+        for (int i=0; i < NUMBER_OF_NODES - 1; i++)
         {
           Serial.write(data, NUMBER_OF_NODES);
           //data[i] = 0;
@@ -289,7 +288,7 @@ void loop()
 void broadcast()
 {
   //BROADCAST
-  delay(2500);
+  delay(2000);
   myTurnToBroadcast = 0;
   //Serial.println();
   //Serial.println("Broadcasting ID to all receiving nodes.");
@@ -482,7 +481,7 @@ int receiveAcknowledge()
 {
   //BROADCAST
   //Serial.println();
-  Serial.println("Broadcasting ID to NODE 1.");
+  //Serial.println("Broadcasting ID to NODE 1.");
   uint8_t waitToReceive = 0;
 
   //Broadcast the message to all other reachable nodes.
