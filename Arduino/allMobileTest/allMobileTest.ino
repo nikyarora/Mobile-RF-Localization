@@ -72,14 +72,12 @@ void setup()
   //Indicates the RSSI values from each node.
   for (int i=0; i<NUMBER_OF_NODES; i++)
   {
-    Serial.println("populating data");
     data[i]=0;
   }
   
   // Flags indicating the receipt of rssi of each mobile node from each anchor.
   for (int i=0; i<NUMBER_OF_NODES-1; i++)
   {
-    Serial.println("population number_of_nodes");
     rssiReceiptFlags[i]=0;
   }
 
@@ -89,18 +87,14 @@ void setup()
     uint8_t receiveSuccessful = 0;
     while(receiveSuccessful == 0)
     {
-       delay(1500);
+       //delay(1500);
        receiveSuccessful = receiveSetup();
-       //Serial.println("trying to receive an acknowledgment");
-       Serial.println(receiveSuccessful);
     }
 
     generateMatrices(x, y, cal, xi, yi, A, B, C);
-    Serial.println("after generate matrices");
 
     for (int i=0; i<NUMBER_OF_NODES-1; i++)
     {
-      Serial.println("resetting number of nodes");
       rssiReceiptFlags[i] = 0;
     } 
 
@@ -111,26 +105,21 @@ void setup()
   //if not the first node, wait for a broadcast and then acknowledge
   else
   {
-    Serial.println("in else statement");
     uint8_t broadcastSuccessful = 0;
     while(broadcastSuccessful == 0)
     {
-      Serial.println("broadcast and receive acknowledgment");
       broadcastSuccessful = receiveAcknowledge();
     }
 
     //fills the rssiReceiptFlags for nodes that must broadcast before receiving from all
     if(CLIENT_ADDRESS != NUMBER_OF_NODES)
     {
-      Serial.println("populating rssiReceiptFlags so myTurnToBroadcast works");
       for(int i = CLIENT_ADDRESS - 1; i < NUMBER_OF_NODES - 1; i++)
       {
         rssiReceiptFlags[i] = 1;
       }
     }
   }
-
-  Serial.println("exiting setup");
 }
 
 /**
@@ -139,7 +128,6 @@ void setup()
  */
 void loop()
 {
-  Serial.print("loop start");
   //Serial.read();
   //RECEIVE
   if (manager.available())
@@ -168,8 +156,8 @@ void loop()
         
         case NODE_2_ADDRESS: 
         //Serial.println("Received RSSI From M2");
-        data[2] = driver.lastRssi();
-        rssiReceiptFlags [1] = 1;
+        data[1] = driver.lastRssi();
+        rssiReceiptFlags [0] = 1;
         if(CLIENT_ADDRESS == NODE_3_ADDRESS)
         {
           myTurnToBroadcast = 1;
@@ -308,13 +296,13 @@ void broadcast()
   delay(2000);
   myTurnToBroadcast = 0;
   //Serial.println();
-  Serial.println("Broadcasting ID to all receiving nodes.");
+  //Serial.println("Broadcasting ID to all receiving nodes.");
   //Broadcast the message to all other reachable nodes.    
   if (manager.sendtoWait(data, sizeof(data), RH_BROADCAST_ADDRESS))
   {
-    Serial.println("Broadcast Successful");
-    Serial.print("My Address: ");
-    Serial.println(CLIENT_ADDRESS);
+    //Serial.println("Broadcast Successful");
+    //Serial.print("My Address: ");
+    //Serial.println(CLIENT_ADDRESS);
   }
   else
   {
