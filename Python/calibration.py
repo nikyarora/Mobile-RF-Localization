@@ -10,8 +10,8 @@ from scipy import stats
 import csv
 import ssLocalizationLib
 
-#port = '/dev/tty.usbmodemfd121'
-port = 2
+port = '/dev/cu.usbmodem1421'
+#port = 2
 
 #Initialize variables
 x,y,numAnchor = ssLocalizationLib.textReader('Pos.txt') #import anchor positions
@@ -47,7 +47,7 @@ while(exitBool&ser.isOpen()):
         
         #gather data for 10 seconds
         stime = time.time()
-        while((time.time()-stime)<10):
+        while((time.time()-stime)<30):
             C = ser.readline()
 
             if len(C) > 0:
