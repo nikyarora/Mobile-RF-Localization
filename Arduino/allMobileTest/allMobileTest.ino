@@ -22,7 +22,7 @@
 #define NODE_6_ADDRESS 0x06
 #define NODE_7_ADDRESS 0x07
 #define NODE_8_ADDRESS 0x08
-#define NUMBER_OF_NODES 3
+#define NUMBER_OF_NODES 4
 RH_RF22 driver;
 
 //This is the address of THIS node  
@@ -66,7 +66,7 @@ void setup()
 {
   Serial.begin(9600);
   if (!manager.init())
-    Serial.println("init failed");
+    //Serial.println("init failed");
   // Defaults after init are 434.0MHz, 0.05MHz AFC pull-in, modulation FSK_Rb2_4Fd36
 
   //Indicates the RSSI values from each node.
@@ -168,7 +168,7 @@ void loop()
         //Serial.println("Received RSSI From M3");
         data[2] = driver.lastRssi();
         rssiReceiptFlags [1] = 1;
-        if(CLIENT_ADDRESS == NODE_1_ADDRESS)
+        if(CLIENT_ADDRESS == NODE_4_ADDRESS)
         {
           myTurnToBroadcast = 1;
         }
