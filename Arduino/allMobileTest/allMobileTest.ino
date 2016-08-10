@@ -26,7 +26,7 @@
 RH_RF22 driver;
 
 //This is the address of THIS node  
-#define CLIENT_ADDRESS NODE_1_ADDRESS
+#define CLIENT_ADDRESS NODE_4_ADDRESS
 
 //GENERATE MATRICES VALUES
 #define xsize 3
@@ -44,9 +44,9 @@ int n = 2;
 float x[xsize] = {14, 5, 7};
 float y[ysize] = {9, 12, 11};
 float cal[xsize][NUMBER_OF_NODES - 1] = {
-    {1, 2},
-    {3, 4},
-    {5, 6}
+    {1, 2, 3},
+    {3, 4, 5},
+    {5, 6, 7}
   };
 
 //Tells node whether it has received from all the other nodes
@@ -156,8 +156,8 @@ void loop()
         
         case NODE_2_ADDRESS: 
         //Serial.println("Received RSSI From M2");
-        data[1] = driver.lastRssi();
-        rssiReceiptFlags [0] = 1;
+        data[3] = driver.lastRssi();
+        rssiReceiptFlags [1] = 1;
         if(CLIENT_ADDRESS == NODE_3_ADDRESS)
         {
           myTurnToBroadcast = 1;
@@ -166,8 +166,8 @@ void loop()
       
         case NODE_3_ADDRESS:
         //Serial.println("Received RSSI From M3");
-        data[2] = driver.lastRssi();
-        rssiReceiptFlags [1] = 1;
+        data[3] = driver.lastRssi();
+        rssiReceiptFlags [2] = 1;
         if(CLIENT_ADDRESS == NODE_4_ADDRESS)
         {
           myTurnToBroadcast = 1;

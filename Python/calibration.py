@@ -10,7 +10,7 @@ from scipy import stats
 import csv
 import ssLocalizationLib
 
-port = '/dev/cu.usbmodem1421'
+port = '/dev/cu.usbmodem1411'
 #port = 2
 
 #Initialize variables
@@ -47,9 +47,10 @@ while(exitBool&ser.isOpen()):
         
         #gather data for 10 seconds
         stime = time.time()
-        while((time.time()-stime)<120):
+        while((time.time()-stime)<60):
             time.sleep(0.05)
             C = ser.readline()
+            time.sleep(0.05)
 
             if len(C) > 0:
                 print C
