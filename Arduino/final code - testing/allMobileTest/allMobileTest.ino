@@ -272,10 +272,13 @@ void loop()
         } 
         stringData = stringData + '\n';
         Serial.print(stringData);
-        if(myTurnToBroadcast == 1)
-        {
-          broadcast();
-        }
+        //Serial.print("my turn to broadcast");
+        //Serial.print(myTurnToBroadcast);
+      }
+      if(myTurnToBroadcast == 1)
+      {
+        broadcast();
+        //Serial.println("broadcasted");
       }
     }
   }

@@ -270,10 +270,13 @@ void loop()
         } 
         stringData = stringData + '\n';
         Serial.print(stringData);
-        if(myTurnToBroadcast == 1)
-        {
-          broadcast();
-        }
+        //Serial.print("my turn to broadcast");
+        //Serial.print(myTurnToBroadcast);
+      }
+      if(myTurnToBroadcast == 1)
+      {
+        broadcast();
+        //Serial.println("broadcasted");
       }
     }
   }
@@ -486,8 +489,8 @@ int receiveSetup()
 int receiveAcknowledge()
 {
   //BROADCAST
-  Serial.println();
-  Serial.println("Broadcasting ID to NODE 1.");
+  //Serial.println();
+  //Serial.println("Broadcasting ID to NODE 1.");
   uint8_t waitToReceive = 0;
 
   //Broadcast the message to all other reachable nodes.

@@ -55,7 +55,8 @@ while(exitBool&ser.isOpen()):
             if len(C) > 0:
                 tempString = C.split(',')
                 print tempString
-                if len(tempString) != numAnchor+1:
+                print len(tempString)
+                if len(tempString) == numAnchor+1:
                     #collect RSSI and place into matrix
                     tempRSSI = numpy.zeros((1,numAnchor),int)
                     for j in range (1, numAnchor + 1):
