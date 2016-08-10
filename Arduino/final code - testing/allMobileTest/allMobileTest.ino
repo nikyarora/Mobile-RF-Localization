@@ -129,7 +129,7 @@ void setup()
  */
 void loop()
 {
- // Serial.println("in the loop");
+  //Serial.println("in the loop");
   //Serial.read();
   //RECEIVE
   if (manager.available())
@@ -280,8 +280,6 @@ void loop()
     }
   }
  }
-  
-  delay(1000);
 }
 
 /*****************************************************************BROADCAST********************************************************************/
@@ -295,20 +293,23 @@ void loop()
 void broadcast()
 {
   //BROADCAST
-  delay(2000);
+  delay(750);
   myTurnToBroadcast = 0;
   //Serial.println();
   //Serial.println("Broadcasting ID to all receiving nodes.");
-  //Broadcast the message to all other reachable nodes.    
-  if (manager.sendtoWait(data, sizeof(data), RH_BROADCAST_ADDRESS))
+  //Broadcast the message to all other reachable nodes. \
+  for(int i = 0; i < 5; i++)
   {
-    //Serial.println("Broadcast Successful");
-    //Serial.print("My Address: ");
-    //Serial.println(CLIENT_ADDRESS);
-  }
-  else
-  {
-   Serial.println("sendtoWait failed");  
+    if (manager.sendtoWait(data, sizeof(data), RH_BROADCAST_ADDRESS))
+    {
+      //Serial.println("Broadcast Successful");
+      //Serial.print("My Address: ");
+      //Serial.println(CLIENT_ADDRESS);
+    }
+    else
+   {
+     Serial.println("sendtoWait failed");  
+   }  
   }
 }
 
@@ -377,7 +378,7 @@ int receiveSetup()
           {
             if(manager.sendtoWait(data, sizeof(data), NODE_4_ADDRESS))
             {
-              //Serial.println("4 success");
+             // Serial.println("4 success");
               sendtoWait = 1;
             }
             else

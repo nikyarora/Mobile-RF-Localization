@@ -278,8 +278,6 @@ void loop()
     }
   }
  }
-  
-  delay(1000);
 }
 
 /*****************************************************************BROADCAST********************************************************************/
@@ -293,20 +291,23 @@ void loop()
 void broadcast()
 {
   //BROADCAST
-  delay(2000);
+  delay(750);
   myTurnToBroadcast = 0;
   //Serial.println();
   //Serial.println("Broadcasting ID to all receiving nodes.");
   //Broadcast the message to all other reachable nodes.    
-  if (manager.sendtoWait(data, sizeof(data), RH_BROADCAST_ADDRESS))
+  for(int i = 0; i < 5; i++)
   {
-    //Serial.println("Broadcast Successful");
-    //Serial.print("My Address: ");
-    //Serial.println(CLIENT_ADDRESS);
-  }
-  else
-  {
-   Serial.println("sendtoWait failed");  
+    if (manager.sendtoWait(data, sizeof(data), RH_BROADCAST_ADDRESS))
+    {
+      //Serial.println("Broadcast Successful");
+      //Serial.print("My Address: ");
+      //Serial.println(CLIENT_ADDRESS);
+    }
+    else
+   {
+     Serial.println("sendtoWait failed");  
+   }  
   }
 }
 
