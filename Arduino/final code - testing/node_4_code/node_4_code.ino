@@ -156,7 +156,7 @@ void loop()
         
         case NODE_2_ADDRESS: 
         //Serial.println("Received RSSI From M2");
-        data[3] = driver.lastRssi();
+        data[2] = driver.lastRssi();
         rssiReceiptFlags [1] = 1;
         if(CLIENT_ADDRESS == NODE_3_ADDRESS)
         {
