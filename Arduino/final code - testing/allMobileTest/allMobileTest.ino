@@ -89,6 +89,7 @@ void setup()
     {
        //delay(1500);
        receiveSuccessful = receiveSetup();
+       //Serial.println("stuck");
     }
 
     generateMatrices(x, y, cal, xi, yi, A, B, C);
@@ -128,6 +129,7 @@ void setup()
  */
 void loop()
 {
+ // Serial.println("in the loop");
   //Serial.read();
   //RECEIVE
   if (manager.available())

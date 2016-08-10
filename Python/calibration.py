@@ -47,17 +47,18 @@ while(exitBool&ser.isOpen()):
         
         #gather data for 10 seconds
         stime = time.time()
-        while((time.time()-stime)<60):
-            time.sleep(0.05)
+        while((time.time()-stime)<30):
+            time.sleep(0.4)
             C = ser.readline()
-            time.sleep(0.05)
+            time.sleep(0.4)
 
             if len(C) > 0:
                 tempString = C.split(',')
                 if len(tempString) != numAnchor+1:
                     #collect RSSI and place into matrix
                     tempRSSI = numpy.zeros((1,numAnchor),int)
-                    for j in range (0, numAnchor):
+                    for j in range (1, numAnchor + 1):
+                    	print tempString[j]
                         if tempString[j] == 0:
                             tempRSSI[0][j]=255
                         else:

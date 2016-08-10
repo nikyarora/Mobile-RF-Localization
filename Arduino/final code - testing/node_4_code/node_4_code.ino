@@ -485,15 +485,15 @@ int receiveSetup()
 int receiveAcknowledge()
 {
   //BROADCAST
-  //Serial.println();
-  //Serial.println("Broadcasting ID to NODE 1.");
+  Serial.println();
+  Serial.println("Broadcasting ID to NODE 1.");
   uint8_t waitToReceive = 0;
 
   //Broadcast the message to all other reachable nodes.
   if (manager.sendtoWait(data, sizeof(data), NODE_1_ADDRESS))
   {
     delay(1000);
-    //Serial.println("Broadcast Successful");
+    Serial.println("Broadcast Successful");
     while(waitToReceive == 0) 
     {
      if (manager.available())
