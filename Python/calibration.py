@@ -47,7 +47,7 @@ while(exitBool&ser.isOpen()):
         
         #gather data for 10 seconds
         stime = time.time()
-        while((time.time()-stime)<30):
+        while((time.time()-stime)<15):
             time.sleep(0.4)
             C = ser.readline()
             time.sleep(0.4)
@@ -56,7 +56,7 @@ while(exitBool&ser.isOpen()):
                 tempString = C.split(',')
                 print tempString
                 print len(tempString)
-                if len(tempString) == numAnchor+1:
+                if len(tempString) == numAnchor+2:
                     #collect RSSI and place into matrix
                     tempRSSI = numpy.zeros((1,numAnchor),int)
                     for j in range (1, numAnchor + 1):
@@ -71,6 +71,8 @@ while(exitBool&ser.isOpen()):
                     posM = numpy.append(posM,pos,axis = 0)
 
 ser.close()
+print RSSI.shape
+print R_dB.shape
 
 #linear regress values
 slope = numpy.zeros((numAnchor,1))

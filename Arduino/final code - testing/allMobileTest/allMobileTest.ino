@@ -23,6 +23,8 @@
 #define NODE_7_ADDRESS 0x07
 #define NODE_8_ADDRESS 0x08
 #define NUMBER_OF_NODES 4
+
+#define MAX_TIME 20
 RH_RF22 driver;
 
 //This is the address of THIS node  
@@ -44,9 +46,7 @@ int n = 2;
 float x[xsize] = {14, 5, 7};
 float y[ysize] = {9, 12, 11};
 float cal[xsize][NUMBER_OF_NODES - 1] = {
-    {1, 2, 3},
-    {3, 4, 5},
-    {5, 6, 7}
+    {}
   };
 
 //Tells node whether it has received from all the other nodes
@@ -58,6 +58,9 @@ uint8_t buf[RH_RF22_MAX_MESSAGE_LEN];
 
 // Class to manage message delivery and receipt, using the driver declared above
 RHReliableDatagram manager(driver, CLIENT_ADDRESS);
+
+time_t timeout;
+time_t loopStartTime;
 
 /**
  * This is the setup. The nodes are all setup here and then exit to the loop.
@@ -121,6 +124,11 @@ void setup()
       }
     }
   }
+
+  if(CLIENT_ADDRESS == NODE_1_ADDRESS)
+  {
+    timeout = now();
+  }
 }
 
 /**
@@ -129,6 +137,15 @@ void setup()
  */
 void loop()
 {
+  loopStartTime = now();
+  if(CLIENT_ADDRESS == NODE_1_ADDRESS)
+  {
+    if(loopStartTime - timeout < MAX_TIME)
+    {
+      timeout = now();
+      myTurnToBroadcast = 1;
+    }
+  }
   //Serial.println("in the loop");
   //Serial.read();
   //RECEIVE
