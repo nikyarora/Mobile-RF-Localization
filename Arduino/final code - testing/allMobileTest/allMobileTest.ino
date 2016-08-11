@@ -273,8 +273,8 @@ void loop()
             }
           }
           String newXAndY;
-          char charXi[0];
-          char charYi[0];
+          char charXi[25];
+          char charYi[25];
           
           xi = XmAndYm[0][0];
           yi = XmAndYm[1][0];
