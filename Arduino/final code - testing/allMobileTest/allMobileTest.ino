@@ -281,12 +281,6 @@ void loop()
           Serial.print(xi);
           Serial.print(",");
           Serial.println(yi);
-          
-         // newXAndY = floatToString(charXi, xi, 3)[25] ;
-         // newXAndY = newXAndY + ",";
-         // newXAndY = newXAndY + floatToString(charYi, yi, 3)[25];
-         // newXAndY = newXAndY + '\n';
-         // Serial.println(newXAndY);
         }
       }
 
@@ -302,13 +296,10 @@ void loop()
         } 
         stringData = stringData + '\n';
         //Serial.print(stringData);
-        //Serial.print("my turn to broadcast");
-        //Serial.print(myTurnToBroadcast);
       }
       if(myTurnToBroadcast == 1)
       {
         broadcast();
-        //Serial.println("broadcasted");
       }
     }
   }
