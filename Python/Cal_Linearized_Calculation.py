@@ -10,7 +10,7 @@ from scipy import stats
 import csv
 import ssLocalizationLib
 
-port = '/dev/cu.usbmodem1421'
+port = '/dev/cu.usbmodem1411'
 #port = 2
 Brodcast_dB = 1
 baud= 9600
@@ -35,8 +35,8 @@ data = "test"
 #ser.write(bytes(data, 'UTF-8'))
 ser.write(data.encode())
 stime = time.time()
-while(ser.isOpen()&((time.time()-stime)<60)):
-    C = ser.readline()
+while(ser.isOpen()&((time.time()-stime)<30)):
+    C = ser.read()
 
     if len(C) > 0:
     	tempString = C.split(',')
