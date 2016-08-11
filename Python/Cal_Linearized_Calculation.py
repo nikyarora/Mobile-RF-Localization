@@ -10,8 +10,8 @@ from scipy import stats
 import csv
 import ssLocalizationLib
 
-#port = '/dev/tty.usbmodemfd121'
-port = 2
+port = '/dev/cu.usbmodem1421'
+#port = 2
 Brodcast_dB = 1
 baud= 9600
 timeout= 0
@@ -20,8 +20,8 @@ xi = 0.33
 yi = 1.6
 
 #Initialize variables
-x_anchor,y_anchor,numAnchor = ssLocalizationLib.textReader('D:\Research\Localization\Pos.txt') #import anchor positions #import anchor positions
-calX,calY,nums = ssLocalizationLib.textReader('D:\Research\Localization\cal.txt')
+x_anchor,y_anchor,numAnchor = ssLocalizationLib.textReader('Pos.txt') #import anchor positions #import anchor positions
+calX,calY,nums = ssLocalizationLib.textReader('cal.txt')
 cal = numpy.array([calX,calY]).T
 ser = ssLocalizationLib.initSerial(port, 9600,0) #set up serial port
 RSSI = numpy.empty((0,3),int)
@@ -39,7 +39,7 @@ while(ser.isOpen()&((time.time()-stime)<10)):
     C = ser.readline()
 
     if len(C) > 0:
-        tempString = C.split(',')
+    	tempString = C.split(',')
         
     pos = numpy.append(pos,[tempString[0],tempString[1]],axis = 0)
 
