@@ -4,6 +4,7 @@
 #include <Time.h>
 #include <MatrixMath.h>
 #include <math.h>
+#include <elapsedMillis.h>
 
 // Mobile_Node_Code.pde
 // -*- mode: C++ -*-
@@ -23,9 +24,10 @@
 #define NODE_7_ADDRESS 0x07
 #define NODE_8_ADDRESS 0x08
 #define NUMBER_OF_NODES 4
-
-#define MAX_TIME 20
+#define MAX_TIME 8000
 RH_RF22 driver;
+
+elapsedMillis timeElapsed;
 
 //This is the address of THIS node  
 #define CLIENT_ADDRESS NODE_1_ADDRESS
@@ -33,8 +35,8 @@ RH_RF22 driver;
 //GENERATE MATRICES VALUES
 #define xsize 3
 #define ysize 3
-float xi = 2.0;
-float yi = 3.0;
+float xi = 0;
+float yi = 2.67;
 float A[xsize][2];
 float B[xsize][1];
 float C[xsize][1];
@@ -43,10 +45,12 @@ int m = xsize;
 int n = 2;
 
 //CALIBRATION VALUES
-float x[xsize] = {14, 5, 7};
-float y[ysize] = {9, 12, 11};
+float x[xsize] = {-4.875,1.188,2.792};
+float y[ysize] = {0, 7.917, 0};
 float cal[xsize][NUMBER_OF_NODES - 1] = {
-    {}
+    {1.596036021269376104e-01,-7.545786433384164127e+01
+     7.202668552816129943e-02,-5.509336898971369578e+01
+     1.604968531492740880e-01,-7.598877203038927064e+01}
   };
 
 //Tells node whether it has received from all the other nodes
@@ -58,9 +62,6 @@ uint8_t buf[RH_RF22_MAX_MESSAGE_LEN];
 
 // Class to manage message delivery and receipt, using the driver declared above
 RHReliableDatagram manager(driver, CLIENT_ADDRESS);
-
-time_t timeout;
-time_t loopStartTime;
 
 /**
  * This is the setup. The nodes are all setup here and then exit to the loop.
@@ -124,11 +125,6 @@ void setup()
       }
     }
   }
-
-  if(CLIENT_ADDRESS == NODE_1_ADDRESS)
-  {
-    timeout = now();
-  }
 }
 
 /**
@@ -137,13 +133,15 @@ void setup()
  */
 void loop()
 {
-  loopStartTime = now();
   if(CLIENT_ADDRESS == NODE_1_ADDRESS)
   {
-    if(loopStartTime - timeout < MAX_TIME)
+    //Serial.println(timeElapsed);
+    if(timeElapsed > MAX_TIME)
     {
-      timeout = now();
       myTurnToBroadcast = 1;
+      broadcast();
+      Serial.println("in the timeout");
+      timeElapsed = 0;
     }
   }
   //Serial.println("in the loop");
@@ -274,6 +272,10 @@ void loop()
               }
             }
           }
+          xi = XmAndYm[0];
+          yi = XmAndYm[1];
+          String newXAndY = xi + "," + yi;
+          Serial.println(newXAndY);
         }
       }
 
@@ -330,6 +332,10 @@ void broadcast()
    {
      Serial.println("sendtoWait failed");  
    }  
+  }
+  if(CLIENT_ADDRESS == NODE_1_ADDRESS)
+  {
+    timeElapsed = 0;
   }
 }
 
