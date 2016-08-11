@@ -35,13 +35,12 @@ data = "test"
 #ser.write(bytes(data, 'UTF-8'))
 ser.write(data.encode())
 stime = time.time()
-while(ser.isOpen()&((time.time()-stime)<10)):
+while(ser.isOpen()&((time.time()-stime)<60)):
     C = ser.readline()
 
     if len(C) > 0:
     	tempString = C.split(',')
-        
-    pos = numpy.append(pos,[tempString[0],tempString[1]],axis = 0)
+    	pos = numpy.append(pos,[tempString[0],tempString[1]],axis = 0)
 
 #wn.mainloop()
 ser.close()

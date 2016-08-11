@@ -2,9 +2,9 @@
 #include <RH_RF22.h>
 #include <SPI.h>
 #include <Time.h>
-#include <MatrixMath.h>
 #include <math.h>
 #include <elapsedMillis.h>
+#include "floatToString.h"
 
 // Mobile_Node_Code.pde
 // -*- mode: C++ -*-
@@ -48,9 +48,9 @@ int n = 2;
 float x[xsize] = {-4.875,1.188,2.792};
 float y[ysize] = {0, 7.917, 0};
 float cal[xsize][NUMBER_OF_NODES - 1] = {
-    {1.596036021269376104e-01,-7.545786433384164127e+01
-     7.202668552816129943e-02,-5.509336898971369578e+01
-     1.604968531492740880e-01,-7.598877203038927064e+01}
+    {.1596036021269376104,-75.45786433384164127},
+    {.07202668552816129943,-55.09336898971369578},
+    {.1604968531492740880,-75.98877203038927064}
   };
 
 //Tells node whether it has received from all the other nodes
@@ -272,9 +272,14 @@ void loop()
               }
             }
           }
-          xi = XmAndYm[0];
-          yi = XmAndYm[1];
-          String newXAndY = xi + "," + yi;
+          String newXAndY;
+          char charXi[0];
+          char charYi[0];
+          
+          xi = XmAndYm[0][0];
+          yi = XmAndYm[1][0];
+          
+          newXAndY = floatToString(charXi, xi, 5)[0] + "," + floatToString(charYi, yi, 3)[0];
           Serial.println(newXAndY);
         }
       }
@@ -286,7 +291,7 @@ void loop()
         for (int i=0; i < NUMBER_OF_NODES; i++)
         {
           int dataValue = data[i];
-          stringData = stringData + data[i] + ",";
+          stringData = stringData + dataValue + ",";
           rssiReceiptFlags[i] = 0;
         } 
         stringData = stringData + '\n';
