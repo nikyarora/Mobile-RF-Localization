@@ -278,8 +278,12 @@ void loop()
           
           xi = XmAndYm[0][0];
           yi = XmAndYm[1][0];
+          Serial.println(xi);
           
-          newXAndY = floatToString(charXi, xi, 5)[0] + "," + floatToString(charYi, yi, 3)[0];
+          newXAndY = floatToString(charXi, xi, 3)[0] ;
+          newXAndY = newXAndY + ",";
+          newXAndY = newXAndY + floatToString(charYi, yi, 3)[0];
+          newXAndY = newXAndY + '\n';
           Serial.println(newXAndY);
         }
       }
@@ -295,7 +299,7 @@ void loop()
           rssiReceiptFlags[i] = 0;
         } 
         stringData = stringData + '\n';
-        Serial.print(stringData);
+        //Serial.print(stringData);
         //Serial.print("my turn to broadcast");
         //Serial.print(myTurnToBroadcast);
       }

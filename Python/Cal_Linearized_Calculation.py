@@ -40,7 +40,8 @@ while(ser.isOpen()&((time.time()-stime)<60)):
 
     if len(C) > 0:
     	tempString = C.split(',')
-    	pos = numpy.append(pos,[tempString[0],tempString[1]],axis = 0)
+    	if len(tempString) == 2:
+    		pos = numpy.append(pos,[tempString[0],tempString[1]],axis = 0)
 
 #wn.mainloop()
 ser.close()
