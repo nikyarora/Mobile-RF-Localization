@@ -580,7 +580,8 @@ void generateMatrices(float ptrx[xsize], float ptry[ysize], float ptrcal[xsize][
     {
       A[i][j] = (-10.0 /ptrcal[i][0]) * linearM[j];
     }
-    C[i][0] = (-ptrcal[i][1]-25.2-20 * log10(sqrt(pow(xi-ptrx[i],2) + pow(yi-ptry[i],2))) / ptrcal[i][0]);
+    float num = ((-ptrcal[i][1]-25.2-20) * log10(sqrt(pow(xi-ptrx[i],2) + pow(yi-ptry[i],2))));
+    C[i][0] = num / (ptrcal[i][0]);
     B[i][0] = 1/ptrcal[i][0];
   }
 
