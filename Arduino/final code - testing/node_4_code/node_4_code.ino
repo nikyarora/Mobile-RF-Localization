@@ -22,7 +22,7 @@
 #define NODE_6_ADDRESS 0x06
 #define NODE_7_ADDRESS 0x07
 #define NODE_8_ADDRESS 0x08
-#define NUMBER_OF_NODES 4
+#define NUMBER_OF_NODES 5
 RH_RF22 driver;
 
 //This is the address of THIS node  
@@ -178,20 +178,23 @@ void loop()
         //Serial.println("Received RSSI From M4");
         data[3] = driver.lastRssi();
         rssiReceiptFlags [2] = 1;
-        if(CLIENT_ADDRESS == NODE_1_ADDRESS)
+        if(CLIENT_ADDRESS == NODE_5_ADDRESS)
         {
           myTurnToBroadcast = 1;
         }
         break;
         
-        /**case NODE_5_ADDRESS:
-        Serial.println("Received RSSI From M5");  
+        case NODE_5_ADDRESS:
+        //Serial.println("Received RSSI From M5");  
         data[4] = buf[1];
-        Serial.println(data[4]);
-        rssiReceiptFlags [4] = 1;
+        rssiReceiptFlags [3] = 1;
+        if(CLIENT_ADDRESS == NODE_1_ADDRESS)
+        {
+          myTurnToBroadcast = 1;
+        }
         break;
 
-        case NODE_6_ADDRESS:
+        /**case NODE_6_ADDRESS:
         Serial.println("Received RSSI From M6");  
         data[5] = buf[1];
         Serial.println(data[5]);

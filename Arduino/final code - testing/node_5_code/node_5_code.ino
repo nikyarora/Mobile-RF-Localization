@@ -26,7 +26,7 @@
 RH_RF22 driver;
 
 //This is the address of THIS node  
-#define CLIENT_ADDRESS NODE_2_ADDRESS
+#define CLIENT_ADDRESS NODE_5_ADDRESS
 
 //GENERATE MATRICES VALUES
 #define xsize 3
@@ -156,8 +156,8 @@ void loop()
         
         case NODE_2_ADDRESS: 
         //Serial.println("Received RSSI From M2");
-        data[1] = driver.lastRssi();
-        rssiReceiptFlags [0] = 1;
+        data[2] = driver.lastRssi();
+        rssiReceiptFlags [1] = 1;
         if(CLIENT_ADDRESS == NODE_3_ADDRESS)
         {
           myTurnToBroadcast = 1;
@@ -166,8 +166,8 @@ void loop()
       
         case NODE_3_ADDRESS:
         //Serial.println("Received RSSI From M3");
-        data[2] = driver.lastRssi();
-        rssiReceiptFlags [1] = 1;
+        data[3] = driver.lastRssi();
+        rssiReceiptFlags [2] = 1;
         if(CLIENT_ADDRESS == NODE_4_ADDRESS)
         {
           myTurnToBroadcast = 1;
@@ -176,8 +176,8 @@ void loop()
         
         case NODE_4_ADDRESS:  
         //Serial.println("Received RSSI From M4");
-        data[3] = driver.lastRssi();
-        rssiReceiptFlags [2] = 1;
+        data[4] = driver.lastRssi();
+        rssiReceiptFlags [3] = 1;
         if(CLIENT_ADDRESS == NODE_5_ADDRESS)
         {
           myTurnToBroadcast = 1;
@@ -185,9 +185,9 @@ void loop()
         break;
         
         case NODE_5_ADDRESS:
-        //Serial.println("Received RSSI From M5");  
+       // Serial.println("Received RSSI From M5");  
         data[4] = buf[1];
-        rssiReceiptFlags [3] = 1;
+        rssiReceiptFlags [4] = 1;
         if(CLIENT_ADDRESS == NODE_1_ADDRESS)
         {
           myTurnToBroadcast = 1;
@@ -500,7 +500,7 @@ int receiveAcknowledge()
   if (manager.sendtoWait(data, sizeof(data), NODE_1_ADDRESS))
   {
     delay(1000);
-    //Serial.println("Broadcast Successful");
+    Serial.println("Broadcast Successful");
     while(waitToReceive == 0) 
     {
      if (manager.available())

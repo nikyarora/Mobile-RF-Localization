@@ -10,9 +10,9 @@ void setup()
   // is Serial.list()[0].
   // On Windows machines, this generally opens COM1.
   // Open whatever port is the one you're using.
-  //String portName = Serial.list()[0]; //change the 0 to a 1 or 2 etc. to match your port
-  myPort = new Serial(this, "/dev/cu.usbmodem1411", 9600);
-  output = createWriter( "CalLinearizedPos2.txt" ); 
+  //Str ing portName = Serial.list()[0]; //change the 0 to a 1 or 2 etc. to match your port
+  myPort = new Serial(this, "/dev/cu.usbmodem1421", 9600);
+  output = createWriter( "CalLinearizedPos1Trial4.txt" ); 
 }
 
 void draw()

@@ -23,7 +23,7 @@
 #define NODE_6_ADDRESS 0x06
 #define NODE_7_ADDRESS 0x07
 #define NODE_8_ADDRESS 0x08
-#define NUMBER_OF_NODES 4
+#define NUMBER_OF_NODES 5
 #define MAX_TIME 8000
 RH_RF22 driver;
 
@@ -54,9 +54,10 @@ float cal[xsize][NUMBER_OF_NODES - 1] = {
   };
 
 /**float cal[xsize][NUMBER_OF_NODES - 1] = {
-    {6.173715902413825368e-02,-5.245925020468379074e+01},
-    {7.257559809628764957e-02,-5.507885898473519148e+01},
-    {6.576413423057536622e-02,-5.338366800011965552e+01}
+    {5.519070910070822400e-02,-5.077365924840918154e+01},
+    {9.963242547591028009e-02,-6.089968650196263411e+01},
+    {4.470621860368632211e-02,-4.824835018572705536e+01
+}
   };**/
 
 //Tells node whether it has received from all the other nodes
@@ -201,20 +202,23 @@ void loop()
         //Serial.println("Received RSSI From M4");
         data[3] = driver.lastRssi();
         rssiReceiptFlags [2] = 1;
-        if(CLIENT_ADDRESS == NODE_1_ADDRESS)
+        if(CLIENT_ADDRESS == NODE_5_ADDRESS)
         {
           myTurnToBroadcast = 1;
         }
         break;
         
-        /**case NODE_5_ADDRESS:
-        Serial.println("Received RSSI From M5");  
-        data[4] = buf[1];
-        Serial.println(data[4]);
-        rssiReceiptFlags [4] = 1;
+        case NODE_5_ADDRESS:
+        //Serial.println("Received RSSI From M5");  
+        data[4] = driver.lastRssi();
+        rssiReceiptFlags [3] = 1;
+        if(CLIENT_ADDRESS == NODE_1_ADDRESS)
+        {
+          myTurnToBroadcast = 1;
+        }
         break;
 
-        case NODE_6_ADDRESS:
+        /**case NODE_6_ADDRESS:
         Serial.println("Received RSSI From M6");  
         data[5] = buf[1];
         Serial.println(data[5]);
@@ -284,9 +288,9 @@ void loop()
           
           xi = XmAndYm[0][0];
           yi = XmAndYm[1][0];
-          Serial.print(xi);
-          Serial.print(",");
-          Serial.println(yi);
+          //Serial.print(xi);
+          //Serial.print(",");
+          //Serial.println(yi);
         }
       }
 
@@ -301,7 +305,7 @@ void loop()
           rssiReceiptFlags[i] = 0;
         } 
         stringData = stringData + '\n';
-        //Serial.print(stringData);
+        Serial.print(stringData);
       }
       if(myTurnToBroadcast == 1)
       {
@@ -423,25 +427,25 @@ int receiveSetup()
           }
           break;
           
-          /**case NODE_5_ADDRESS:
-          Serial.println("Received From M5");  
+          case NODE_5_ADDRESS:
+          //Serial.println("Received From M5");  
           rssiReceiptFlags [3] = 1;
           while(sendtoWait == 0)
           {
             if(manager.sendtoWait(data, sizeof(data), NODE_5_ADDRESS))
             {
-              Serial.println("5 success");
+              //Serial.println("5 success");
               sendtoWait = 1;
             }
             else
             {
-              Serial.println("5 keep going");
+              //Serial.println("5 keep going");
               sendtoWait = 0;
             }
           }
           break;
   
-          case NODE_6_ADDRESS:
+          /**case NODE_6_ADDRESS:
           Serial.println("Received From M6");  
           rssiReceiptFlags [4] = 1;
           while(sendtoWait == 0)
