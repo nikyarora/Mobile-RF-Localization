@@ -48,9 +48,9 @@ int n = 2;
 float x[xsize] = {-4.875,1.188,2.792};
 float y[ysize] = {0, 7.917, 0};
 float cal[xsize][NUMBER_OF_NODES - 1] = {
-    {.1596036021269376104,-75.45786433384164127},
-    {.07202668552816129943,-55.09336898971369578},
-    {.1604968531492740880,-75.98877203038927064}
+    {3.677491495447306885e-02,-4.661763945828212030e+01},
+    {4.300389644444909537e-02,-4.814294129134573552e+01},
+    {3.759575377348402941e-02,-4.683614764247802498e+01}
   };
 
 //Tells node whether it has received from all the other nodes
@@ -243,11 +243,11 @@ void loop()
       {
         if(myTurnToBroadcast)
         {
-         // generateMatrices(x, y, cal, xi, yi, A, B, C);
+          generateMatrices(x, y, cal, xi, yi, A, B, C);
           float rssiValues[xsize][1];
           for(int i = 0; i < NUMBER_OF_NODES - 1; i++)
           {
-            rssiValues[i][0] = data[i];
+            rssiValues[i][0] = data[i + 1];
           }
 
           //subtract B and C from the RSSI values

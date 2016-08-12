@@ -10,7 +10,7 @@ from scipy import stats
 import csv
 import ssLocalizationLib
 
-port = '/dev/cu.usbmodem1421'
+port = '/dev/cu.usbmodem1411'
 #port = 2
 
 #Initialize variables

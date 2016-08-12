@@ -29,7 +29,7 @@ void setup()
   
   generateMatrices(x, y, cal, xi, yi, A, B, C);
 
-  float data[NUMBER_OF_NODES - 1] = {5, 6, 7};
+  float data[NUMBER_OF_NODES - 1] = {242, 230, 240};
   float rssiValues[xsize][1];
   for(int i = 0; i < NUMBER_OF_NODES - 1; i++)
   {
@@ -71,7 +71,7 @@ void setup()
   
   for(int i = 0; i < 2; i++)
   {
-    //Serial.println(XmAndYm[i][0]);
+    Serial.println(XmAndYm[i][0]);
   }
 }
 
@@ -111,8 +111,6 @@ void generateMatrices(float ptrx[xsize], float ptry[ysize], float ptrcal[xsize][
     }
     float num = ((-ptrcal[i][1]-25.2-20) * log10(sqrt(pow(xi-ptrx[i],2) + pow(yi-ptry[i],2))));
     C[i][0] = num / (ptrcal[i][0]);
-    //Serial.print("C: ");
-    //Serial.println(C[i][0]);
     B[i][0] = 1/ptrcal[i][0];
     //Serial.print("B: ");
     //Serial.println(B[i][0]);
@@ -131,7 +129,6 @@ void generateMatrices(float ptrx[xsize], float ptry[ysize], float ptrcal[xsize][
     for (int k = 0; k < n; k++)
     {
       finalarr[i][0] = finalarr[i][0] + (A[i][k] * arr[k][0]);
-      Serial.println(finalarr[i][0]);
     }
   }
   
