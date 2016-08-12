@@ -247,7 +247,7 @@ void loop()
       {
         if(myTurnToBroadcast)
         {
-          generateMatrices(x, y, cal, xi, yi, A, B, C);
+         // generateMatrices(x, y, cal, xi, yi, A, B, C);
           float rssiValues[xsize][1];
           for(int i = 0; i < NUMBER_OF_NODES - 1; i++)
           {
@@ -282,9 +282,9 @@ void loop()
           
           xi = XmAndYm[0][0];
           yi = XmAndYm[1][0];
-          Serial.print(xi);
-          Serial.print(",");
-          Serial.println(yi);
+          //Serial.print(xi);
+          //Serial.print(",");
+          //Serial.println(yi);
         }
       }
 

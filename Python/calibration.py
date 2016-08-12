@@ -47,7 +47,7 @@ while(exitBool&ser.isOpen()):
         
         #gather data for 10 seconds
         stime = time.time()
-        while((time.time()-stime)<60):
+        while((time.time()-stime)<30):
             time.sleep(0.4)
             C = ser.readline()
             time.sleep(0.4)
