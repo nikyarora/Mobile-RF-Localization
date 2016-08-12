@@ -53,6 +53,12 @@ float cal[xsize][NUMBER_OF_NODES - 1] = {
     {3.759575377348402941e-02,-4.683614764247802498e+01}
   };
 
+/**float cal[xsize][NUMBER_OF_NODES - 1] = {
+    {6.173715902413825368e-02,-5.245925020468379074e+01},
+    {7.257559809628764957e-02,-5.507885898473519148e+01},
+    {6.576413423057536622e-02,-5.338366800011965552e+01}
+  };**/
+
 //Tells node whether it has received from all the other nodes
 uint8_t myTurnToBroadcast = 0;
 
@@ -243,7 +249,7 @@ void loop()
       {
         if(myTurnToBroadcast)
         {
-          generateMatrices(x, y, cal, xi, yi, A, B, C);
+          //generateMatrices(x, y, cal, xi, yi, A, B, C);
           float rssiValues[xsize][1];
           for(int i = 0; i < NUMBER_OF_NODES - 1; i++)
           {

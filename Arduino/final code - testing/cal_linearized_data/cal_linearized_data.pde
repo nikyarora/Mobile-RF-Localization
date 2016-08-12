@@ -12,7 +12,7 @@ void setup()
   // Open whatever port is the one you're using.
   //String portName = Serial.list()[0]; //change the 0 to a 1 or 2 etc. to match your port
   myPort = new Serial(this, "/dev/cu.usbmodem1411", 9600);
-  output = createWriter( "GaussNewtonValues.txt" );
+  output = createWriter( "CalLinearizedPos2.txt" ); 
 }
 
 void draw()
@@ -20,7 +20,7 @@ void draw()
   while (myPort.available() > 0 ) 
   {
     val = myPort.readStringUntil('\n');
-    if ( val != null ) 
+    if ( val != null )
     {
       output.println( val );
     }
