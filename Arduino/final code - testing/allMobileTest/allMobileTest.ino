@@ -24,7 +24,7 @@
 #define NODE_7_ADDRESS 0x07
 #define NODE_8_ADDRESS 0x08
 #define NUMBER_OF_NODES 5
-#define MAX_TIME 8000
+#define MAX_TIME 7000  //2*delayTime*(numAnchor+2)
 RH_RF22 driver;
 
 elapsedMillis timeElapsed;
@@ -33,8 +33,8 @@ elapsedMillis timeElapsed;
 #define CLIENT_ADDRESS NODE_1_ADDRESS
 
 //GENERATE MATRICES VALUES
-#define xsize 3
-#define ysize 3
+#define xsize 4
+#define ysize 4
 float xi = 0;
 float yi = 2.67;
 float A[xsize][2];
@@ -45,20 +45,14 @@ int m = xsize;
 int n = 2;
 
 //CALIBRATION VALUES
-float x[xsize] = {-4.875,1.188,2.792};
-float y[ysize] = {0, 7.917, 0};
-float cal[xsize][NUMBER_OF_NODES - 1] = {
-    {3.677491495447306885e-02,-4.661763945828212030e+01},
-    {4.300389644444909537e-02,-4.814294129134573552e+01},
-    {3.759575377348402941e-02,-4.683614764247802498e+01}
+float x[xsize] = {3.833,-2.75,-3.04,3.00};
+float y[ysize] = {0,0,7.896,9.33};
+float cal[xsize][2] = {
+    {1.399643026063695887e-02,-4.181458475936650387e+01},
+    {1.290888252371923811e-02,-4.157773581707284904e+01},
+    {1.295050475594070917e-02,-4.160959771371668836e+01},
+    {2.048159104468691427e-02,-4.322058201363967100e+01}
   };
-
-/**float cal[xsize][NUMBER_OF_NODES - 1] = {
-    {5.519070910070822400e-02,-5.077365924840918154e+01},
-    {9.963242547591028009e-02,-6.089968650196263411e+01},
-    {4.470621860368632211e-02,-4.824835018572705536e+01
-}
-  };**/
 
 //Tells node whether it has received from all the other nodes
 uint8_t myTurnToBroadcast = 0;
@@ -145,7 +139,7 @@ void loop()
     //Serial.println(timeElapsed);
     if(timeElapsed > MAX_TIME)
     {
-      myTurnToBroadcast = 1;
+     // myTurnToBroadcast = 1;
       broadcast();
       Serial.println("in the timeout");
       timeElapsed = 0;
@@ -253,7 +247,7 @@ void loop()
       {
         if(myTurnToBroadcast)
         {
-          //generateMatrices(x, y, cal, xi, yi, A, B, C);
+          generateMatrices(x, y, cal, xi, yi, A, B, C);
           float rssiValues[xsize][1];
           for(int i = 0; i < NUMBER_OF_NODES - 1; i++)
           {
@@ -288,9 +282,9 @@ void loop()
           
           xi = XmAndYm[0][0];
           yi = XmAndYm[1][0];
-          //Serial.print(xi);
-          //Serial.print(",");
-          //Serial.println(yi);
+          Serial.print(xi);
+          Serial.print(",");
+          Serial.println(yi);
         }
       }
 
@@ -332,7 +326,7 @@ void broadcast()
   //Serial.println();
   //Serial.println("Broadcasting ID to all receiving nodes.");
   //Broadcast the message to all other reachable nodes. \
-  for(int i = 0; i < 5; i++)
+  for(int i = 0; i < 10; i++)
   {
     if (manager.sendtoWait(data, sizeof(data), RH_BROADCAST_ADDRESS))
     {
@@ -568,7 +562,7 @@ int receiveAcknowledge()
 /**************************************************
  * This function ...
  *************************************************/
-void generateMatrices(float ptrx[xsize], float ptry[ysize], float ptrcal[xsize][NUMBER_OF_NODES - 1], float xi, float yi, float A[xsize][2], float B[xsize][1],float C[xsize][1])
+void generateMatrices(float ptrx[xsize], float ptry[ysize], float ptrcal[xsize][2], float xi, float yi, float A[xsize][2], float B[xsize][1],float C[xsize][1])
 {
   int m = xsize;
   int n = 2;

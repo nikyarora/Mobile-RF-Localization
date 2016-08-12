@@ -12,7 +12,7 @@ void setup()
   // Open whatever port is the one you're using.
   //Str ing portName = Serial.list()[0]; //change the 0 to a 1 or 2 etc. to match your port
   myPort = new Serial(this, "/dev/cu.usbmodem1421", 9600);
-  output = createWriter( "CalLinearizedPos1Trial4.txt" ); 
+  output = createWriter( "CalLinearized4NodesPos1GaussNewton.txt" ); 
 }
 
 void draw()

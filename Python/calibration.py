@@ -16,9 +16,9 @@ port = '/dev/cu.usbmodem1421'
 #Initialize variables
 x,y,numAnchor = ssLocalizationLib.textReader('Pos.txt') #import anchor positions
 ser = ssLocalizationLib.initSerial(port, 9600,0) #set up serial port
-R_dB = numpy.empty((0,3),float)
-dis = numpy.empty((0,3),float)
-RSSI = numpy.empty((0,3),int)
+R_dB = numpy.empty((0,4),float)
+dis = numpy.empty((0,4),float)
+RSSI = numpy.empty((0,4),int)
 posM = numpy.empty((0,2),float)
 B_dB = 1
 exitBool = True
@@ -47,7 +47,7 @@ while(exitBool&ser.isOpen()):
         
         #gather data for 10 seconds
         stime = time.time()
-        while((time.time()-stime)<15):
+        while((time.time()-stime)<60):
             time.sleep(0.4)
             C = ser.readline()
             time.sleep(0.4)
